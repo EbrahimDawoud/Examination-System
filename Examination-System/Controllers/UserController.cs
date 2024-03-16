@@ -19,16 +19,16 @@ namespace Examination_System.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string username, string password)
+        public IActionResult Login(string UserName, string UserPass)
         {
-            if (userRepo.IsUserCredentialsValid(username, password).Result) //check if the user credentials are valid
+            if (userRepo.IsUserCredentialsValid(UserName, UserPass).Result) //check if the user credentials are valid
             {
                 return RedirectToAction("Index", "Home");
             }
             else
             {
                 ViewBag.Message = "Invalid Credentials";
-                return View();
+                return PartialView("ErrorInLogin");
             }
         }
     }
