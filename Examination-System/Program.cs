@@ -14,6 +14,7 @@ namespace Examination_System
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
+            builder.Services.AddScoped<IStudentRepo, StudentRepo>();
             builder.Services.AddDbContext<ExaminationSystemContext>(Options => Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
