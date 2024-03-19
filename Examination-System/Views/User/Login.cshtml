@@ -1,0 +1,55 @@
+﻿@model User
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+	<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body style="background-color:#9D282F">
+	<div class="text-center mt-5 p-5 bg-opacity-75 bg-light w-50 mx-auto rounded-3">
+		<img class="mt-4 mb-3" width="230px" src="~/assets/iti-logo-text.png" />
+		<form class="text-center" method="post" action="/User/Login">
+
+			<div class=" rounded-2 p-4 mt-3 mx-auto">	
+				<div class="form-floating mb-3  ">
+					<input type="text" class="form-control" asp-for="UserName" placeholder="Please Enter your name">
+					<label asp-for="UserName">UserName</label>
+				</div>
+				<div class="form-floating">
+					<input type="password" class="form-control" asp-for="UserPass" placeholder="Password">
+					<label asp-for="UserPass">Password</label>
+				</div>
+			</div>
+			<div id="cont" class=" rounded-3 p-3">
+			</div>
+			<div>
+				<input style="width:160px; color:white; background-color:#A9292E" class="btn " type="submit" value="Login" />
+			</div>
+			
+		</form>
+	</div>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$("form").submit(function (e) {
+				e.preventDefault();
+				$.ajax({
+					url: "/User/Login",
+					type: "post",
+					data: $("form").serialize(),
+					success: function (data) {
+						$("#cont").html(data);
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>
