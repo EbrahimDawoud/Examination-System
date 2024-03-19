@@ -12,6 +12,7 @@ var student_id = 5; // Replace with the actual student id
 <form method="post" action="/Student/Result?examId=@Model.ExamId&studentId=@student_id">
         @foreach(var question in ExamQuestions)
         {
+            
             <div class="input-group m-4">
                 <div class="card col-10 mx-auto">
                     <div class="card-header">
