@@ -5,7 +5,7 @@ namespace Examination_System.Controllers
 {
     public class UserController : Controller
     {
-        IUserRepo userRepo; //user repository
+        readonly IUserRepo userRepo; //user repository
 
         public UserController(IUserRepo _userRepo) //constructor
         {
