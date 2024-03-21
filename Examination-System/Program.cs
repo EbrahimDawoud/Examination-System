@@ -15,6 +15,7 @@ namespace Examination_System
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
             builder.Services.AddScoped<IStudentRepo, StudentRepo>();
+            builder.Services.AddScoped<IInstructorRepo, InstructorRepo>();
             builder.Services.AddDbContext<ExaminationSystemContext>(Options => Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
@@ -36,7 +37,7 @@ namespace Examination_System
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=User}/{action=Login}/{id?}");
+                pattern: "{controller=Instructor}/{action=GenerateRandomExam}/{id?}");
 
             app.Run();
         }
