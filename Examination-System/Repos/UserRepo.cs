@@ -1,5 +1,6 @@
 ﻿using Examination_System.Controllers;
 using Examination_System.Data;
+using Examination_System.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -10,9 +11,11 @@ namespace Examination_System.Repos
     public interface IUserRepo
     {
         public Task<bool> IsUserCredentialsValid(string username, string password); //check if the user credentials are valid
-    }
+		User GetUser(string Name, string Password);
 
-    public class UserRepo : IUserRepo
+	}
+
+	public class UserRepo : IUserRepo
     {
         readonly ExaminationSystemContext db; // database context
 
@@ -46,5 +49,10 @@ namespace Examination_System.Repos
                 return false;
             }
         }
-    }
+
+		public  User GetUser(string Name, string Password)
+		{
+			return db.Users.FirstOrDefault(u => u.UserName == Name && u.UserPass == Password);
+		}
+	}
 }
