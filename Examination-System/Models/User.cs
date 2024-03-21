@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Examination_System.Models;
 
@@ -16,6 +17,8 @@ public partial class User
     public string? UserPhone { get; set; }
 
     public string? UserAddress { get; set; }
+    [AllowNull]
+    public string? UserRole { get; set; }
 
     public virtual Instructor? Instructor { get; set; }
 
