@@ -51,7 +51,7 @@ namespace Examination_System
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Account}/{action=Login}/{id?}");
+                pattern: "{controller=Instructor}/{action=GenerateRandomExam}/{id?}");
 
             app.Run();
         }
