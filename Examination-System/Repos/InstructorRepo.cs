@@ -1,6 +1,7 @@
 ﻿using Examination_System.Data;
 using Examination_System.Models;
 using Examination_System.ModelViews;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Examination_System.Repos
@@ -16,11 +17,10 @@ namespace Examination_System.Repos
         // generate random exam 
         public Task<int> GenerateRandomExam(Exam exam, int noOfMCQ, int noOfTF, int degreeOfMCQ, int degreeOfTF);
 
+
         // get all instructor courses
         public Task<List<Course>> GetInstructorCourses(int instructorId);
 
-
-        // get all students in the course
 
         public Task<List<StudentDegree>> GetStudentsResultByCourse(int crsId);
 
@@ -106,6 +106,7 @@ namespace Examination_System.Repos
                 if (noOfMCQInCourse < noOfMCQ || noOfTFInCourse < noOfTF)
                 {
                     throw new Exception($"No enough questions in the course, Available MCQ: {noOfMCQInCourse}, TF: {noOfTFInCourse}");
+
                 }
 
                 // get random mcq questions
@@ -118,6 +119,7 @@ namespace Examination_System.Repos
                 db.Exams.Add(exam);
 
                 db.SaveChanges();
+
                 //check if the exam is added
                 if (exam.ExamId == 0)
                 {
@@ -197,6 +199,7 @@ namespace Examination_System.Repos
                 Console.WriteLine(ex.Message);
                 return null;
             }
+
         }
     }
 }

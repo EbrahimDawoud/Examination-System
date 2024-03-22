@@ -257,6 +257,7 @@
                             </li>*@
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2 @((ViewBag.Title == "Add Question") ? "active" : "")"
+
                                    asp-controller="Instructor"
                                    asp-action="AddQuestion"
                                    data-link="Add Question">
@@ -268,6 +269,7 @@
 
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2 @((ViewBag.Title == "Generate Random Exam") ? "active" : "")"
+
                                    asp-controller="Instructor"
                                    asp-action="GenerateRandomExam"
                                    data-link="Generate Exam">
@@ -284,6 +286,7 @@
                                     Show Results
                                 </a>
                             </li>
+
 
                         </ul>
 
@@ -316,5 +319,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

@@ -7,10 +7,17 @@ namespace Examination_System.Controllers
     public class StudentController : Controller
     {
         readonly IStudentRepo SRepo; //student repository
+        readonly IUserRepo URepo; //user repository
 
-        public StudentController(IStudentRepo _SRepo) //constructor
+        public StudentController(IStudentRepo _SRepo, IUserRepo _URepo) //constructor
         {
             SRepo = _SRepo;
+            URepo = _URepo;
+        }
+
+        public IActionResult Index()
+        {
+            return View();
         }
 
         [HttpGet]
@@ -92,6 +99,32 @@ namespace Examination_System.Controllers
                 ViewBag.Message = "Failed to Submit Exam";
                 return View();
             }
+        }
+
+        public IActionResult Courses()
+        {
+            int userId = URepo.GetUserId(User);
+
+            return View(SRepo.GetStudentCourses(userId).Result);
+
+        }
+
+        public async Task<IActionResult> Results()
+        {
+            List<StudentCourse> stdResults = await SRepo.GetStudentResultsByStdId(URepo.GetUserId(User));
+            foreach (var item in stdResults)
+            {
+                Console.WriteLine(item);
+            }
+            return View(stdResults);
+        }
+        public async Task<IActionResult> ResultDetails(int id, int crsId)
+        {
+            Exam exam = await SRepo.GetResultDetailsByStdId(id ,crsId);
+            ViewBag.answers =  SRepo.StudentAnswer(exam.ExamId, id).Result;
+
+
+            return View( exam);
         }
     }
 }

@@ -87,6 +87,7 @@ namespace Examination_System.Controllers
                 Console.WriteLine(e);
                 return View();
 
+
                 //throw;
             }
         }
@@ -108,6 +109,7 @@ namespace Examination_System.Controllers
             var students = await instructorRepo.GetStudentsResultByCourse(crsId);
             return PartialView(students);
         }
+
     }
 }
 

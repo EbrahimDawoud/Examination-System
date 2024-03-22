@@ -35,11 +35,27 @@ namespace Examination_System.Controllers
 					ClaimsIdentity identity = new(new[]
 					{
 					new Claim(ClaimTypes.Name, user.UserName),
-					new Claim(ClaimTypes.Role, user.UserRole)
+					new Claim(ClaimTypes.Role, user.UserRole),
+					new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()) //add the user id to the claims
 				}, CookieAuthenticationDefaults.AuthenticationScheme);
 					ClaimsPrincipal principal = new(identity);
 					await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-					return RedirectToAction("Exam", "Student");
+					if(user.UserRole == "Admin")
+					{
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    else if(user.UserRole == "Student")
+					{
+                        return RedirectToAction("Index", "Student");
+                    }
+                    else if(user.UserRole == "Instructor")
+					{
+                        return RedirectToAction("Index", "Instructor");
+                    }
+                    else
+					{
+                        return RedirectToAction("Login");
+                    }
 				}
 				else
 				{

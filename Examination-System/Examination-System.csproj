@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ModelViews\" />
     <Folder Include="wwwroot\assets\" />
   </ItemGroup>
 

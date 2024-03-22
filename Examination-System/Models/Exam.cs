@@ -20,4 +20,5 @@ public partial class Exam
     public virtual ICollection<StudentAnswer> StudentAnswers { get; set; } = new List<StudentAnswer>();
 
     public virtual ICollection<StudentExam> StudentExams { get; set; } = new List<StudentExam>();
+
 }
