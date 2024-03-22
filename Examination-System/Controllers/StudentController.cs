@@ -13,6 +13,11 @@ namespace Examination_System.Controllers
             SRepo = _SRepo;
         }
 
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         [HttpGet]
         public IActionResult Exam(int crsId)
         {
