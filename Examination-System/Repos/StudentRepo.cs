@@ -124,12 +124,15 @@ namespace Examination_System.Repos
         {
             try
             {
-                var parameters = new SqlParameter[]
-                {
-                    new SqlParameter("@StdId", id)
-                };
+                //var parameters = new SqlParameter[]
+                //{
+                //    new SqlParameter("@stdId", id)
+                //};
 
-                return await db.StudentCourses.FromSqlRaw("EXECUTE GetStudentCourses @StdId", parameters).ToListAsync();
+                //return await db.StudentCourses.FromSqlRaw("EXECUTE sp_Get_Cources_By_StudentId @stdId", parameters).ToListAsync();
+                
+                return await db.StudentCourses.Where(sc => sc.StudentId == id).Include(sc => sc.Crs).ToListAsync();
+              
             }
             catch (Exception ex)
             {

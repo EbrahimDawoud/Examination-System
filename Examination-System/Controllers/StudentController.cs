@@ -20,11 +20,6 @@ namespace Examination_System.Controllers
             return View();
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         [HttpGet]
         public IActionResult Exam(int crsId)
         {
@@ -108,8 +103,10 @@ namespace Examination_System.Controllers
 
         public IActionResult Courses()
         {
-            
-            return View(URepo.GetUserId(User));
+            int userId = URepo.GetUserId(User);
+
+            return View(SRepo.GetStudentCourses(userId).Result);
+
         }
     }
 }
