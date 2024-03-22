@@ -16,15 +16,17 @@ namespace Examination_System
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
             builder.Services.AddScoped<IStudentRepo, StudentRepo>();
-			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-	            .AddCookie(options =>
-              	{
-		            options.LoginPath = "/Account/Login";
-		        //options.AccessDeniedPath = "/Account/AccessDenied";
-	            });
-			builder.Services.AddSession();
+            builder.Services.AddTransient<IInstructorRepo, InstructorRepo>();
 
-			builder.Services.AddDbContext<ExaminationSystemContext>(Options => Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                  {
+                      options.LoginPath = "/Account/Login";
+                      //options.AccessDeniedPath = "/Account/AccessDenied";
+                  });
+            builder.Services.AddSession();
+
+            builder.Services.AddDbContext<ExaminationSystemContext>(Options => Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
@@ -41,15 +43,15 @@ namespace Examination_System
 
             app.UseRouting();
 
-			app.UseAuthentication();
+            app.UseAuthentication();
 
-			app.UseAuthorization();
+            app.UseAuthorization();
 
             app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Account}/{action=Login}/{id?}");
+                pattern: "{controller=Instructor}/{action=GenerateRandomExam}/{id?}");
 
             app.Run();
         }

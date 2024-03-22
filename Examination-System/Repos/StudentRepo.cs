@@ -132,6 +132,7 @@ namespace Examination_System.Repos
                 //return await db.StudentCourses.FromSqlRaw("EXECUTE sp_Get_Cources_By_StudentId @stdId", parameters).ToListAsync();
                 
                 return await db.StudentCourses.Where(sc => sc.StudentId == id).Include(sc => sc.Crs).ToListAsync();
+              
             }
             catch (Exception ex)
             {

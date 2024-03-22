@@ -106,6 +106,7 @@ namespace Examination_System.Controllers
             int userId = URepo.GetUserId(User);
 
             return View(SRepo.GetStudentCourses(userId).Result);
+
         }
     }
 }
