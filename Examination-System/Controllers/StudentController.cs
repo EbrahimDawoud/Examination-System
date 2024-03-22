@@ -103,8 +103,9 @@ namespace Examination_System.Controllers
 
         public IActionResult Courses()
         {
-            
-            return View(URepo.GetUserId(User));
+            int userId = URepo.GetUserId(User);
+
+            return View(SRepo.GetStudentCourses(userId).Result);
         }
     }
 }
