@@ -15,6 +15,9 @@ namespace Examination_System.Repos
         public Task<StudentExam> GetStudentExamDegree(int examId, int studentId);
         public Task<bool> IsStudentExamSubmitted(int examId, int studentId);
         public Task<List<StudentCourse>> GetStudentCourses(int id);
+        public Task<List<StudentCourse>> GetStudentResultsByStdId(int stdId);
+        public Task<Exam> GetResultDetailsByStdId(int stdId , int crsId);
+        public Task<List<StudentAnswer>> StudentAnswer(int examId, int studentId);
 
     }
 
@@ -137,5 +140,46 @@ namespace Examination_System.Repos
                 return null;
             }
         }
+        public async Task<List<StudentCourse>> GetStudentResultsByStdId(int stdId)
+        {
+            try
+            {
+                return await db.StudentCourses.Where(sc => sc.StudentId == stdId).Include(sc => sc.Crs).Where(s => s.Grade != null).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+		public async Task<Exam> GetResultDetailsByStdId(int stdId , int crsId)
+		{
+			var StdExam = await db.StudentExams.FirstOrDefaultAsync(se => se.StdId == stdId);
+			if (StdExam != null)
+			{
+				int examId = StdExam.ExamId;
+                if(db.Exams.FirstOrDefault(s=>s.ExamId == examId).CrsId == crsId)
+                {
+					return await db.Exams.Where(e => e.ExamId == examId).Include(c => c.Crs).Include(e => e.ExamQuestions).ThenInclude(q => q.Question).ThenInclude(qo => qo.QuestionOptions).FirstOrDefaultAsync();
+				}
+                else { return null; }
+			}
+			else
+			{
+				return null;
+			}
+		}
+		public async Task<List<StudentAnswer>> StudentAnswer(int examId, int studentId)
+		{
+			try
+			{
+				return await db.StudentAnswers.Where(sa => sa.ExamId == examId && sa.StudentId == studentId).ToListAsync();
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+				return null;
+			}
+		}
     }
 }
