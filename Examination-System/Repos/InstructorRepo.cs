@@ -13,8 +13,7 @@ namespace Examination_System.Repos
         public Task<bool> AddQuestionOption(int questionId, Dictionary<int, string> options);
 
         // generate random exam 
-        public Task<int> GenerateRandomExam(int crsId, int examDuration, DateOnly examDate,
-            int noOfMCQ, int noOfTF, int degreeOfMCQ, int degreeOfTF);
+        public Task<int> GenerateRandomExam(Exam exam,int noOfMCQ, int noOfTF, int degreeOfMCQ, int degreeOfTF);
 
         // get all instructor courses
         public Task<List<Course>> GetInstructorCourses(int instructorId);
@@ -88,14 +87,14 @@ namespace Examination_System.Repos
             }
         }
 
-        public async Task<int> GenerateRandomExam(int crsId, int examDuration, DateOnly examDate, int noOfMCQ, int noOfTF, int degreeOfMCQ, int degreeOfTF)
+        public async Task<int> GenerateRandomExam(Exam exam, int noOfMCQ, int noOfTF, int degreeOfMCQ, int degreeOfTF)
         {
             //check if no of mcq and tf are available
 
             try
             {
-                int noOfMCQInCourse = db.Questions.Count(q => q.CrsId == crsId && q.QuestionType == "MCQ");
-                int noOfTFInCourse = db.Questions.Count(q => q.CrsId == crsId && q.QuestionType == "TF");
+                int noOfMCQInCourse = db.Questions.Count(q => q.CrsId == exam.CrsId && q.QuestionType == "MCQ");
+                int noOfTFInCourse = db.Questions.Count(q => q.CrsId == exam.CrsId && q.QuestionType == "TF");
 
                 // throw exception if the no of mcq or tf is less than the required no of mcq or tf with number of questions available
                 if (noOfMCQInCourse < noOfMCQ || noOfTFInCourse < noOfTF)
@@ -104,19 +103,12 @@ namespace Examination_System.Repos
                 }
 
                 // get random mcq questions
-                var mcqQuestions = db.Questions.Where(q => q.CrsId == crsId && q.QuestionType == "MCQ").OrderBy(q => Guid.NewGuid()).Take(noOfMCQ).ToList();
+                var mcqQuestions = db.Questions.Where(q => q.CrsId == exam.CrsId && q.QuestionType == "MCQ").OrderBy(q => Guid.NewGuid()).Take(noOfMCQ).ToList();
 
                 // get random tf questions
-                var tfQuestions = db.Questions.Where(q => q.CrsId == crsId && q.QuestionType == "TF").OrderBy(q => Guid.NewGuid()).Take(noOfTF).ToList();
+                var tfQuestions = db.Questions.Where(q => q.CrsId == exam.CrsId && q.QuestionType == "TF").OrderBy(q => Guid.NewGuid()).Take(noOfTF).ToList();
 
                 // add the exam to the database
-                Exam exam = new Exam
-                {
-                    CrsId = crsId,
-                    Duration = examDuration,
-                    GenerationDate = examDate
-                };
-
                 db.Exams.Add(exam);
 
                  db.SaveChanges();

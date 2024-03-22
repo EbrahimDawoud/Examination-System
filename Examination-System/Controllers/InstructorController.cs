@@ -78,14 +78,16 @@ namespace Examination_System.Controllers
             try
             {
 
-                instructorRepo.GenerateRandomExam(exam.CrsId, exam.Duration, exam.GenerationDate, MCQCount, TFCount, degreeOfMCQ, degreeOfTF);
+                var generatedExamId = await instructorRepo.GenerateRandomExam(exam, MCQCount, TFCount, degreeOfMCQ, degreeOfTF);
                 return RedirectToAction("GenerateRandomExam");
             }
             catch (Exception e)
             {
                 ModelState.AddModelError("", "Error in adding the exam");
                 Console.WriteLine(e);
-                throw;
+                return RedirectToAction("GenerateRandomExam");
+
+                //throw;
             }
         }
 
