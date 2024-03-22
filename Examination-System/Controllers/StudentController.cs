@@ -7,10 +7,17 @@ namespace Examination_System.Controllers
     public class StudentController : Controller
     {
         readonly IStudentRepo SRepo; //student repository
+        readonly IUserRepo URepo; //user repository
 
-        public StudentController(IStudentRepo _SRepo) //constructor
+        public StudentController(IStudentRepo _SRepo, IUserRepo _URepo) //constructor
         {
             SRepo = _SRepo;
+            URepo = _URepo;
+        }
+
+        public IActionResult Index()
+        {
+            return View();
         }
 
         public IActionResult Index()
@@ -97,6 +104,12 @@ namespace Examination_System.Controllers
                 ViewBag.Message = "Failed to Submit Exam";
                 return View();
             }
+        }
+
+        public IActionResult Courses()
+        {
+            
+            return View(URepo.GetUserId(User));
         }
     }
 }

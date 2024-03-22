@@ -35,7 +35,8 @@ namespace Examination_System.Controllers
 					ClaimsIdentity identity = new(new[]
 					{
 					new Claim(ClaimTypes.Name, user.UserName),
-					new Claim(ClaimTypes.Role, user.UserRole)
+					new Claim(ClaimTypes.Role, user.UserRole),
+					new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()) //add the user id to the claims
 				}, CookieAuthenticationDefaults.AuthenticationScheme);
 					ClaimsPrincipal principal = new(identity);
 					await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
