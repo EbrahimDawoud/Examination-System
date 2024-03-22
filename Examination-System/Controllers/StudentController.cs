@@ -120,11 +120,20 @@ namespace Examination_System.Controllers
         }
         public async Task<IActionResult> ResultDetails(int id, int crsId)
         {
-            Exam exam = await SRepo.GetResultDetailsByStdId(id ,crsId);
-            ViewBag.answers =  SRepo.StudentAnswer(exam.ExamId, id).Result;
+            try
+            {
+				Exam exam = await SRepo.GetResultDetailsByStdId(id, crsId);
+				ViewBag.answers = SRepo.StudentAnswer(exam.ExamId, id).Result;
+				return View(exam);
+
+			}
+			catch (Exception e)
+            {
+                return View("Index");
+            }
+            
 
 
-            return View( exam);
         }
     }
 }
