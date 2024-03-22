@@ -9,7 +9,7 @@ public partial class Exam
 
     public DateOnly GenerationDate { get; set; }
 
-    public int? CrsId { get; set; }
+    public int CrsId { get; set; }
 
     public int Duration { get; set; }
 

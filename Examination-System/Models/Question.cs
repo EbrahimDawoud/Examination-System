@@ -9,10 +9,11 @@ public partial class Question
 
     public string QuestionText { get; set; } = null!;
 
-    public string? QuestionType { get; set; }
+    public string QuestionType { get; set; }
 
     public int? CrsId { get; set; }
 
+    public int QuestionAnswer { get; set; }
     public virtual Course? Crs { get; set; }
 
     public virtual ICollection<ExamQuestion> ExamQuestions { get; set; } = new List<ExamQuestion>();
