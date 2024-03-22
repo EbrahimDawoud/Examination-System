@@ -94,8 +94,8 @@ namespace Examination_System.Repos
 
             try
             {
-                int noOfMCQInCourse = await db.Questions.Where(q => q.CrsId == crsId && q.QuestionType == "MCQ").CountAsync();
-                int noOfTFInCourse = await db.Questions.Where(q => q.CrsId == crsId && q.QuestionType == "TF").CountAsync();
+                int noOfMCQInCourse = db.Questions.Where(q => q.CrsId == crsId && q.QuestionType == "MCQ").Count();
+                int noOfTFInCourse = db.Questions.Where(q => q.CrsId == crsId && q.QuestionType == "TF").Count();
 
                 // throw exception if the no of mcq or tf is less than the required no of mcq or tf with number of questions available
                 if (noOfMCQInCourse < noOfMCQ || noOfTFInCourse < noOfTF)
@@ -104,10 +104,10 @@ namespace Examination_System.Repos
                 }
 
                 // get random mcq questions
-                var mcqQuestions = await db.Questions.Where(q => q.CrsId == crsId && q.QuestionType == "MCQ").OrderBy(q => Guid.NewGuid()).Take(noOfMCQ).ToListAsync();
+                var mcqQuestions = db.Questions.Where(q => q.CrsId == crsId && q.QuestionType == "MCQ").OrderBy(q => Guid.NewGuid()).Take(noOfMCQ).ToList();
 
                 // get random tf questions
-                var tfQuestions = await db.Questions.Where(q => q.CrsId == crsId && q.QuestionType == "TF").OrderBy(q => Guid.NewGuid()).Take(noOfTF).ToListAsync();
+                var tfQuestions = db.Questions.Where(q => q.CrsId == crsId && q.QuestionType == "TF").OrderBy(q => Guid.NewGuid()).Take(noOfTF).ToList();
 
                 // add the exam to the database
                 Exam exam = new Exam
@@ -118,7 +118,7 @@ namespace Examination_System.Repos
                 };
 
                 db.Exams.Add(exam);
-                await db.SaveChangesAsync();
+                db.SaveChanges();
 
                 //check if the exam is added
                 if (exam.ExamId == 0)
@@ -137,7 +137,7 @@ namespace Examination_System.Repos
 
                     db.ExamQuestions.Add(examQuestion);
                 }
-                await db.SaveChangesAsync();
+                db.SaveChanges();
 
                 foreach (var question in tfQuestions)
                 {
@@ -149,7 +149,7 @@ namespace Examination_System.Repos
 
                     db.ExamQuestions.Add(examQuestion);
                 }
-                await db.SaveChangesAsync();
+                db.SaveChanges();
 
                 return exam.ExamId;
 

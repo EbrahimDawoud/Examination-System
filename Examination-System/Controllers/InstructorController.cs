@@ -33,7 +33,7 @@ namespace Examination_System.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddQuestion(IFormCollection form, Dictionary<int, string> options = null)
+        public async Task<IActionResult> AddQuestion(IFormCollection form, Dictionary<int, string> options = null)
         {
             // get the question data from the form
             var question = new Question
@@ -73,7 +73,7 @@ namespace Examination_System.Controllers
         }
 
         [HttpPost]
-        public IActionResult GenerateRandomExam(Exam exam, int MCQCount, int TFCount)
+        public async Task<IActionResult> GenerateRandomExam(Exam exam, int MCQCount, int TFCount)
         {
             instructorRepo.GenerateRandomExam(exam.CrsId, exam.Duration,exam.GenerationDate, MCQCount, TFCount);
             return RedirectToAction("GenerateRandomExam");

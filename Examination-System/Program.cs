@@ -16,7 +16,7 @@ namespace Examination_System
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
             builder.Services.AddScoped<IStudentRepo, StudentRepo>();
-            builder.Services.AddScoped<IInstructorRepo, InstructorRepo>();
+            builder.Services.AddTransient<IInstructorRepo, InstructorRepo>();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -51,7 +51,7 @@ namespace Examination_System
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Account}/{action=Login}/{id?}");
+                pattern: "{controller=Instructor}/{action=GenerateRandomExam}/{id?}");
 
             app.Run();
         }

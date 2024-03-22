@@ -176,7 +176,7 @@ public partial class ExaminationSystemContext : DbContext
             entity.Property(e => e.ExamId).HasColumnName("exam_id");
             entity.Property(e => e.CrsId).HasColumnName("crs_id");
             entity.Property(e => e.Duration).HasColumnName("duration");
-            entity.Property(e => e.GenerationDate).HasColumnName("generation_date");
+            entity.Property(e => e.GenerationDate).HasColumnName("exam_date");
 
             entity.HasOne(d => d.Crs).WithMany(p => p.Exams)
                 .HasForeignKey(d => d.CrsId)
@@ -238,6 +238,8 @@ public partial class ExaminationSystemContext : DbContext
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .HasColumnName("question_type");
+            entity.Property(e => e.QuestionAnswer)
+                .HasColumnName("question_answer");
 
             entity.HasOne(d => d.Crs).WithMany(p => p.Questions)
                 .HasForeignKey(d => d.CrsId)
