@@ -108,5 +108,23 @@ namespace Examination_System.Controllers
             return View(SRepo.GetStudentCourses(userId).Result);
 
         }
+
+        public async Task<IActionResult> Results()
+        {
+            List<StudentCourse> stdResults = await SRepo.GetStudentResultsByStdId(URepo.GetUserId(User));
+            foreach (var item in stdResults)
+            {
+                Console.WriteLine(item);
+            }
+            return View(stdResults);
+        }
+        public async Task<IActionResult> ResultDetails(int id, int crsId)
+        {
+            Exam exam = await SRepo.GetResultDetailsByStdId(id ,crsId);
+            ViewBag.answers =  SRepo.StudentAnswer(exam.ExamId, id).Result;
+
+
+            return View( exam);
+        }
     }
 }

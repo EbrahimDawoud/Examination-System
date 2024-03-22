@@ -1,0 +1,30 @@
+﻿@model IEnumerable<StudentCourse>
+@{
+    ViewData["Title"] = "Results";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+
+<div>
+    <table class="table table-active">
+        <thead>
+            <tr>
+                <th>Course Name</th>
+                <th>Grade</th>
+                <th>Full Mark</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>@item.Crs.CrsName</td>
+					<td>@item.Grade</td>
+                    <td>@item.Crs.CrsGrade</td>
+                    <td><a class="btn btn-primary" asp-controller="Student" asp-action="ResultDetails" asp-route-id="@item.StudentId" asp-route-crsId="@item.CrsId">Details</a></td>
+				</tr>
+			}
+    </table>
+
+</div>
+

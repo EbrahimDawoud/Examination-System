@@ -18,4 +18,8 @@ public partial class StudentAnswer
     public virtual Question Question { get; set; } = null!;
 
     public virtual Student Student { get; set; } = null!;
+	public override string ToString()
+	{
+        return $"ExamId: {ExamId}, QuestionId: {QuestionId}, StudentId: {StudentId}, SelectedOption: {SelectedOption}";
+	}
 }
