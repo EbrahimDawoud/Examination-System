@@ -1,5 +1,6 @@
 ﻿using Examination_System.Data;
 using Examination_System.Models;
+using Examination_System.ModelViews;
 using Microsoft.EntityFrameworkCore;
 
 namespace Examination_System.Repos
@@ -13,10 +14,15 @@ namespace Examination_System.Repos
         public Task<bool> AddQuestionOption(int questionId, Dictionary<int, string> options);
 
         // generate random exam 
-        public Task<int> GenerateRandomExam(Exam exam,int noOfMCQ, int noOfTF, int degreeOfMCQ, int degreeOfTF);
+        public Task<int> GenerateRandomExam(Exam exam, int noOfMCQ, int noOfTF, int degreeOfMCQ, int degreeOfTF);
 
         // get all instructor courses
         public Task<List<Course>> GetInstructorCourses(int instructorId);
+
+
+        // get all students in the course
+
+        public Task<List<StudentDegree>> GetStudentsResultByCourse(int crsId);
 
 
 
@@ -111,7 +117,7 @@ namespace Examination_System.Repos
                 // add the exam to the database
                 db.Exams.Add(exam);
 
-                 db.SaveChanges();
+                db.SaveChanges();
                 //check if the exam is added
                 if (exam.ExamId == 0)
                 {
@@ -156,9 +162,41 @@ namespace Examination_System.Repos
 
                 throw;
             }
+        }
+
+        public async Task<List<StudentDegree>> GetStudentsResultByCourse(int crsId)
+        {
+            try
+            {
+                //get last exam for this course
+                var exam = db.Exams.Where(e => e.CrsId == crsId).OrderByDescending(e => e.ExamId).FirstOrDefault();
+
+                //check if there is no exams for this course
+                if (exam == null)
+                {
+                    //return empty list
+                    return new List<StudentDegree>();
+                }
+
+                //get students degrees in this exam
+                var studentsDegrees = db.StudentExams.Where(se => se.ExamId == exam.ExamId).Include(se => se.Std)
+                    .Select(se => new StudentDegree
+                    {
+                        StudentId = se.StdId,
+                        StudentName =
+                            db.Users.Where(u => u.UserId == se.StdId).Select(u => u.UserName).FirstOrDefault(),
+                        Degree = se.Grade
+                    }).ToListAsync();
+
+                return await studentsDegrees;
 
 
-
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
         }
     }
 }

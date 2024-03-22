@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Show Results";
+
+}
+<div class="row">
+    <div class="col-md-6 m-auto ">
+        <h2> Show Results</h2>
+        <select class="form-select" name="CrsId" id="crsId" asp-items="ViewBag.courses" value="Model.CrsId">
+        </select>
+
+        <div class="container-fluid" id="results"></div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function getResults() {
+            var crsId = $('#crsId').val();
+            $.ajax({
+                url: '/Instructor/GetStudentsResultByCourse',
+                type: 'GET',
+                data: { crsId: crsId },
+                success: function (data) {
+                    $('#results').html(data);
+                }
+            });
+        }
+        $(document).ready(function () { 
+            getResults();
+            $('#crsId').change(getResults);
+        });
+
+    </script>
+}

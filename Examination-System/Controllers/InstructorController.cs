@@ -91,6 +91,23 @@ namespace Examination_System.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ShowResults()
+        {
+
+            var courses = await instructorRepo.GetInstructorCourses(6);
+
+            ViewBag.courses = new SelectList(courses, "CrsId", "CrsName");
+
+            return View();
+        }
+
+        public async Task<IActionResult> GetStudentsResultByCourse(int crsId)
+        {
+
+            var students = await instructorRepo.GetStudentsResultByCourse(crsId);
+            return PartialView(students);
+        }
     }
 }
 
