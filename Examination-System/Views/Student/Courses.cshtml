@@ -4,29 +4,29 @@
     ViewData["Title"] = "Courses";
     Layout = "~/Views/Shared/_StudentLayout.cshtml";
 }
+
+<h1>Courses</h1>
+
 <div>
-    <div class="row">
+    <hr />
         <div class="col-12">
             @foreach (var course in Model)
             {
-                <div class="row">
-                    <div class="card mb-3">
-                        <div class="card-header">@course.Crs.CrsName</div>
-                        <div class="card-body">
-                            <blockquote class="blockquote mb-0">
-                                @if (course.Grade == null)
-                                {
-                                    <p>Not yet graded</p>
-                                }
-                                else
-                                {
-                                    <p>Grade: @course.Grade</p>
-                                }
-                            </blockquote>
-                        </div>
+                <div class="card mb-3">
+                    <div class="card-header">@course.Crs.CrsName</div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            @if (course.Grade == null)
+                            {
+                                <p>Not yet graded</p>
+                            }
+                            else
+                            {
+                                <p>Grade: @course.Grade</p>
+                            }
+                        </blockquote>
                     </div>
                 </div>
             }
         </div>
-    </div>
-    </div>
+</div>

@@ -131,9 +131,6 @@ namespace Examination_System.Controllers
             {
                 return View("Index");
             }
-            
-
-
         }
     }
 }
