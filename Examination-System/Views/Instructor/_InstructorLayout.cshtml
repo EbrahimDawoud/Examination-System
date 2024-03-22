@@ -256,7 +256,8 @@
                             </a>
                             </li>*@
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2"
+                                <a class="nav-link d-flex align-items-center gap-2 @((ViewBag.Title == "Add Question") ? "active" : "")"
+
                                    asp-controller="Instructor"
                                    asp-action="AddQuestion"
                                    data-link="Add Question">
@@ -267,7 +268,8 @@
 
 
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2"
+                                <a class="nav-link d-flex align-items-center gap-2 @((ViewBag.Title == "Generate Random Exam") ? "active" : "")"
+
                                    asp-controller="Instructor"
                                    asp-action="GenerateRandomExam"
                                    data-link="Generate Exam">
@@ -275,6 +277,16 @@
                                     Generate Exam
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 @((ViewBag.Title == "Show Results") ? "active" : "")"
+                                   asp-controller="Instructor"
+                                   asp-action="ShowResults"
+                                   data-link="Generate Exam">
+                                    <svg class="bi"><use xlink:href="#file-earmark" /></svg>
+                                    Show Results
+                                </a>
+                            </li>
+
 
                         </ul>
 
@@ -304,6 +316,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"
             integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp"
             crossorigin="anonymous"></script>
-    @RenderSection("Scripts", required: false)
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

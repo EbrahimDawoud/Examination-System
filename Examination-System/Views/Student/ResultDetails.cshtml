@@ -1,0 +1,45 @@
+﻿@model Exam
+@{
+	Layout = "~/Views/Shared/_StudentLayout.cshtml";
+
+	ViewData["Title"] = "ResultDetails";
+	var i = -1;
+	var answers = ViewBag.answers;
+
+}
+<table>
+	<thead>
+<tr>
+	<th>No</th>
+		<th>
+			Question
+		</th>
+		<th>
+			Correct Option
+		</th>
+		<th>
+			Your Selected Option
+		</th>
+	</tr>
+</thead>
+<tbody>
+@foreach (var question in Model.ExamQuestions)
+	{
+		<tr>
+			<td>
+				@{i++;} @i
+			</td>
+			<td>
+				@question.Question.QuestionText
+			</td>
+			<td>
+				@question.Question.QuestionAnswer
+			</td>
+			<td>
+				@answers[i].SelectedOption
+			</td>
+		</tr>
+	}
+
+</table>
+
