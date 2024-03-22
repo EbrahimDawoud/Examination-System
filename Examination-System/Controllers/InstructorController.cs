@@ -65,7 +65,7 @@ namespace Examination_System.Controllers
 
         [HttpGet]
         public IActionResult GenerateRandomExam()
-        {   
+        {
             // get the courses for this signed in instructor and send them to the view
             var courses = instructorRepo.GetInstructorCourses(6).Result;
             ViewBag.courses = new SelectList(courses, "CrsId", "CrsName");
@@ -73,10 +73,20 @@ namespace Examination_System.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GenerateRandomExam(Exam exam, int MCQCount, int TFCount)
+        public async Task<IActionResult> GenerateRandomExam(Exam exam, int MCQCount, int TFCount, int degreeOfMCQ, int degreeOfTF)
         {
-            instructorRepo.GenerateRandomExam(exam.CrsId, exam.Duration,exam.GenerationDate, MCQCount, TFCount);
-            return RedirectToAction("GenerateRandomExam");
+            try
+            {
+
+                instructorRepo.GenerateRandomExam(exam.CrsId, exam.Duration, exam.GenerationDate, MCQCount, TFCount, degreeOfMCQ, degreeOfTF);
+                return RedirectToAction("GenerateRandomExam");
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", "Error in adding the exam");
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
     }

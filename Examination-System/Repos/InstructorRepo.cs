@@ -14,7 +14,7 @@ namespace Examination_System.Repos
 
         // generate random exam 
         public Task<int> GenerateRandomExam(int crsId, int examDuration, DateOnly examDate,
-            int noOfMCQ, int noOfTF);
+            int noOfMCQ, int noOfTF, int degreeOfMCQ, int degreeOfTF);
 
         // get all instructor courses
         public Task<List<Course>> GetInstructorCourses(int instructorId);
@@ -88,14 +88,14 @@ namespace Examination_System.Repos
             }
         }
 
-        public async Task<int> GenerateRandomExam(int crsId, int examDuration, DateOnly examDate, int noOfMCQ, int noOfTF)
+        public async Task<int> GenerateRandomExam(int crsId, int examDuration, DateOnly examDate, int noOfMCQ, int noOfTF, int degreeOfMCQ, int degreeOfTF)
         {
             //check if no of mcq and tf are available
 
             try
             {
-                int noOfMCQInCourse = db.Questions.Where(q => q.CrsId == crsId && q.QuestionType == "MCQ").Count();
-                int noOfTFInCourse = db.Questions.Where(q => q.CrsId == crsId && q.QuestionType == "TF").Count();
+                int noOfMCQInCourse = db.Questions.Count(q => q.CrsId == crsId && q.QuestionType == "MCQ");
+                int noOfTFInCourse = db.Questions.Count(q => q.CrsId == crsId && q.QuestionType == "TF");
 
                 // throw exception if the no of mcq or tf is less than the required no of mcq or tf with number of questions available
                 if (noOfMCQInCourse < noOfMCQ || noOfTFInCourse < noOfTF)
@@ -118,8 +118,8 @@ namespace Examination_System.Repos
                 };
 
                 db.Exams.Add(exam);
-                db.SaveChanges();
 
+                 db.SaveChanges();
                 //check if the exam is added
                 if (exam.ExamId == 0)
                 {
@@ -132,11 +132,13 @@ namespace Examination_System.Repos
                     ExamQuestion examQuestion = new ExamQuestion
                     {
                         ExamId = exam.ExamId,
-                        QuestionId = question.QuestionId
+                        QuestionId = question.QuestionId,
+                        Degree = degreeOfMCQ
                     };
 
                     db.ExamQuestions.Add(examQuestion);
                 }
+
                 db.SaveChanges();
 
                 foreach (var question in tfQuestions)
@@ -144,7 +146,9 @@ namespace Examination_System.Repos
                     ExamQuestion examQuestion = new ExamQuestion
                     {
                         ExamId = exam.ExamId,
-                        QuestionId = question.QuestionId
+                        QuestionId = question.QuestionId,
+                        Degree = degreeOfTF
+
                     };
 
                     db.ExamQuestions.Add(examQuestion);
