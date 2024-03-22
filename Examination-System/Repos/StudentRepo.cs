@@ -1,5 +1,6 @@
 ﻿using Examination_System.Data;
 using Examination_System.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System.ComponentModel;
@@ -13,6 +14,7 @@ namespace Examination_System.Repos
         public Task<bool> SubmitExam(int examId, int studentId, List<StudentAnswer> studentAnswers);
         public Task<StudentExam> GetStudentExamDegree(int examId, int studentId);
         public Task<bool> IsStudentExamSubmitted(int examId, int studentId);
+        public Task<List<StudentCourse>> GetStudentCourses(int id);
 
     }
 
@@ -115,6 +117,24 @@ namespace Examination_System.Repos
             {
                 Console.WriteLine(ex.Message);
                 return false;
+            }
+        }
+
+        public async Task<List<StudentCourse>> GetStudentCourses(int id) //get the student courses
+        {
+            try
+            {
+                var parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@StdId", id)
+                };
+
+                return await db.StudentCourses.FromSqlRaw("EXECUTE GetStudentCourses @StdId", parameters).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
             }
         }
     }
