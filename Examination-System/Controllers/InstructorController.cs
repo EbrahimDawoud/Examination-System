@@ -83,9 +83,9 @@ namespace Examination_System.Controllers
             }
             catch (Exception e)
             {
-                ModelState.AddModelError("", "Error in adding the exam");
+                ModelState.AddModelError("", e.Message);
                 Console.WriteLine(e);
-                return RedirectToAction("GenerateRandomExam");
+                return View();
 
                 //throw;
             }

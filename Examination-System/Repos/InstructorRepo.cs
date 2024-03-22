@@ -99,7 +99,7 @@ namespace Examination_System.Repos
                 // throw exception if the no of mcq or tf is less than the required no of mcq or tf with number of questions available
                 if (noOfMCQInCourse < noOfMCQ || noOfTFInCourse < noOfTF)
                 {
-                    throw new Exception("No enough questions in the course");
+                    throw new Exception($"No enough questions in the course, Available MCQ: {noOfMCQInCourse}, TF: {noOfTFInCourse}");
                 }
 
                 // get random mcq questions
