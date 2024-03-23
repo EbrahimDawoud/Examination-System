@@ -13,10 +13,12 @@ namespace Examination_System
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBMAY9C3t2UFhhQlJBfV5AQmBIYVp/TGpJfl96cVxMZVVBJAtUQF1hTX5QdEdiXXtYcX1QT2BU");
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
             builder.Services.AddScoped<IStudentRepo, StudentRepo>();
             builder.Services.AddTransient<IInstructorRepo, InstructorRepo>();
+            builder.Services.AddTransient<IReportsRepo, ReportsRepo>();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
