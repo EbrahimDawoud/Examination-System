@@ -170,27 +170,21 @@ namespace Examination_System.Repos
         {
             try
             {
-                //get last exam for this course
-                var exam = db.Exams.Where(e => e.CrsId == crsId).OrderByDescending(e => e.ExamId).FirstOrDefault();
-
-                //check if there is no exams for this course
-                if (exam == null)
-                {
-                    //return empty list
-                    return new List<StudentDegree>();
-                }
-
+                
                 //get students degrees in this exam
-                var studentsDegrees = db.StudentExams.Where(se => se.ExamId == exam.ExamId).Include(se => se.Std)
+                var studentsDegrees = await db.StudentCourses.Where(se => se.CrsId == 20).Include(se => se.Student)
                     .Select(se => new StudentDegree
                     {
-                        StudentId = se.StdId,
+                        StudentId = se.StudentId,
                         StudentName =
-                            db.Users.Where(u => u.UserId == se.StdId).Select(u => u.UserName).FirstOrDefault(),
-                        Degree = se.Grade
+                            db.Users.Where(u => u.UserId == se.StudentId).Select(u => u.UserName).FirstOrDefault(),
+                        Degree = se.Grade 
                     }).ToListAsync();
 
-                return await studentsDegrees;
+                //check if the students degrees are available
+
+
+                return  studentsDegrees;
 
 
             }

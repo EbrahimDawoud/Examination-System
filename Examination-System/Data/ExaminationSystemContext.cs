@@ -316,7 +316,6 @@ public partial class ExaminationSystemContext : DbContext
             entity.Property(e => e.CrsId).HasColumnName("crs_id");
             entity.Property(e => e.StudentId).HasColumnName("student_id");
             entity.Property(e => e.Grade)
-                .HasMaxLength(50)
                 .HasColumnName("grade");
 
             entity.HasOne(d => d.Crs).WithMany(p => p.StudentCourses)
