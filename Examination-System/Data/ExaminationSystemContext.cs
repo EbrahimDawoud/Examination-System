@@ -288,7 +288,7 @@ public partial class ExaminationSystemContext : DbContext
 
             entity.Property(e => e.ExamId).HasColumnName("exam_id");
             entity.Property(e => e.QuestionId).HasColumnName("question_id");
-            entity.Property(e => e.StudentId).HasColumnName("student_id");
+            entity.Property(e => e.StudentId).HasColumnName("std_id");
             entity.Property(e => e.SelectedOption).HasColumnName("selected_option");
 
             entity.HasOne(d => d.Exam).WithMany(p => p.StudentAnswers)
