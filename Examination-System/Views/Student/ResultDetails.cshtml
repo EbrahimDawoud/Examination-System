@@ -3,43 +3,73 @@
 	Layout = "~/Views/Shared/_StudentLayout.cshtml";
 
 	ViewData["Title"] = "ResultDetails";
-	var i = -1;
+	var questions = ViewBag.questions;
 	var answers = ViewBag.answers;
+	var options = ViewBag.options;
+	var StudentAnswers = ViewBag.StudentAnswers;
 
 }
-<table>
-	<thead>
-<tr>
-	<th>No</th>
-		<th>
-			Question
-		</th>
-		<th>
-			Correct Option
-		</th>
-		<th>
-			Your Selected Option
-		</th>
-	</tr>
-</thead>
-<tbody>
-@foreach (var question in Model.ExamQuestions)
-	{
-		<tr>
-			<td>
-				@{i++;} @i
-			</td>
-			<td>
-				@question.Question.QuestionText
-			</td>
-			<td>
-				@question.Question.QuestionAnswer
-			</td>
-			<td>
-				@answers[i].SelectedOption
-			</td>
-		</tr>
-	}
 
-</table>
-
+<div>
+<h1>Result Details</h1>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+<h4 class="card-title">Result</h4>	
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table">
+							<thead class=" text-primary">
+								<tr>
+								<th>
+									Question
+								</th>
+								<th>
+									Answer
+								</th>
+								<th>
+									Your Answer
+								</th>
+								<th>
+									Options
+								</th>
+								</tr>
+							</thead>
+							<tbody>
+								@for (int i = 0; i < questions.Count; i++)
+								{
+									<tr>
+										<td>
+											@questions[i]
+										</td>
+										<td>
+											@answers[i]
+										</td>
+										<td>
+											@StudentAnswers[i]
+										</td>
+										<td>
+											@foreach (var option in options[i])
+											{
+												@if (option == answers[i])
+												{
+													<span class="text-success">@option</span>
+												}
+												else
+												{
+													<span class="text-danger">@option</span>
+												}
+											}
+										</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

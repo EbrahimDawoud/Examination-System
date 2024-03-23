@@ -17,7 +17,9 @@ namespace Examination_System.Repos
         public Task<List<StudentCourse>> GetStudentCourses(int id);
         public Task<List<StudentCourse>> GetStudentResultsByStdId(int stdId);
         public Task<Exam> GetResultDetailsByStdId(int stdId , int crsId);
-        public Task<List<StudentAnswer>> StudentAnswer(int examId, int studentId);
+        public Task<List<string>> StudentAnswer(int examId, int studentId);
+        public List<List<string>> ExamQuestionOptions(List<ExamQuestion> examQuestion);
+        public List<string> ExamQuestionAnswers(List<ExamQuestion> examQuestion);
 
     }
 
@@ -172,11 +174,24 @@ namespace Examination_System.Repos
 				return null;
 			}
 		}
-		public async Task<List<StudentAnswer>> StudentAnswer(int examId, int studentId)
+		public async Task<List<string>> StudentAnswer(int examId, int studentId)
 		{
 			try
 			{
-				return await db.StudentAnswers.Where(sa => sa.ExamId == examId && sa.StudentId == studentId).ToListAsync();
+				var answers =db.StudentAnswers.Where(sa => sa.ExamId == examId && sa.StudentId == studentId).ToListAsync();
+                Dictionary<int,int> answerOp= new Dictionary<int, int>();
+                foreach (var item in await answers)
+                {
+					answerOp.Add(item.QuestionId, item.SelectedOption);
+				}
+                
+                List<string>StdAnswers = new List<string>();
+                foreach (var item in answerOp)
+                {
+                    StdAnswers.Add(db.QuestionOptions.Where(qo => qo.QuestionId ==item.Key &&qo.OptionNo == item.Value ).Select(qo => qo.OptionText).FirstOrDefault());
+                }
+                return StdAnswers;
+
 			}
 			catch (Exception ex)
 			{
@@ -184,5 +199,36 @@ namespace Examination_System.Repos
 				return null;
 			}
 		}
+        public List<List<string>> ExamQuestionOptions(List<ExamQuestion> examQuestion)
+        {
+			List<List<string>> myList = new List<List<string>>();
+			foreach (var item in examQuestion)
+			{
+                var i = 1;
+				List<string> options = new List<string>();
+				foreach (var option in item.Question.QuestionOptions)
+				{
+                    if (option.OptionNo == 0) { i = 0; }
+					options.Add(item.Question.QuestionOptions.Where(qo => qo.QuestionId == item.QuestionId && qo.OptionNo==i).Select(qo => qo.OptionText).FirstOrDefault());
+                    i++;
+				}
+				myList.Add(options);
+			}
+			return myList;
+		}
+        public List<string> ExamQuestionAnswers(List<ExamQuestion> examQuestion)
+        {
+            List<string> answers = new List<string>();
+			Dictionary<int, int> answerData = new Dictionary<int, int>();
+			foreach (var item in examQuestion)
+            {
+                answerData.Add(item.QuestionId, item.Question.QuestionAnswer);
+			}
+            foreach (var item in answerData)
+            {
+                answers.Add(db.QuestionOptions.Where(qo => qo.QuestionId == item.Key && qo.OptionNo == item.Value).Select(qo => qo.OptionText).FirstOrDefault());
+            }
+            return answers;
+        }
     }
 }

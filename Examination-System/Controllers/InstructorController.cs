@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Examination_System.Data;
 using Examination_System.Models;
 using Examination_System.Repos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Examination_System.Controllers
 {
+    [Authorize (Roles = "Instructor")]
     public class InstructorController : Controller
     {
         private readonly IInstructorRepo instructorRepo;
