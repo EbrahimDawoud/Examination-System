@@ -40,17 +40,13 @@ namespace Examination_System.Controllers
 				}, CookieAuthenticationDefaults.AuthenticationScheme);
 					ClaimsPrincipal principal = new(identity);
 					await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-					if(user.UserRole == "Admin")
-					{
-                        return RedirectToAction("Index", "Admin");
-                    }
-                    else if(user.UserRole == "Student")
+                    if(user.UserRole == "Student")
 					{
                         return RedirectToAction("Index", "Student");
                     }
                     else if(user.UserRole == "Instructor")
 					{
-                        return RedirectToAction("Index", "Instructor");
+                        return RedirectToAction("AddQuestion", "Instructor");
                     }
                     else
 					{

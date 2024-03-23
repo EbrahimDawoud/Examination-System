@@ -1,9 +1,11 @@
 ﻿using Examination_System.Models;
 using Examination_System.Repos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Examination_System.Controllers
 {
+    [Authorize (Roles = "Student")]
     public class StudentController : Controller
     {
         readonly IStudentRepo SRepo; //student repository
@@ -123,7 +125,16 @@ namespace Examination_System.Controllers
             try
             {
 				Exam exam = await SRepo.GetResultDetailsByStdId(id, crsId);
-				ViewBag.answers = SRepo.StudentAnswer(exam.ExamId, id).Result;
+                List<ExamQuestion> examQuestions =[.. exam.ExamQuestions];
+                List<string> questions= new List<string>();
+                foreach (var item in examQuestions)
+                {
+					questions.Add(item.Question.QuestionText);
+				}
+                ViewBag.questions = questions;
+                ViewBag.options = SRepo.ExamQuestionOptions(examQuestions);
+                ViewBag.answers = SRepo.ExamQuestionAnswers(examQuestions);
+                ViewBag.StudentAnswers = SRepo.StudentAnswer(exam.ExamId, id).Result;
 				return View(exam);
 
 			}
