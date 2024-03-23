@@ -16,7 +16,7 @@ namespace Examination_System.Repos
         public Task<bool> IsStudentExamSubmitted(int examId, int studentId);
         public Task<List<StudentCourse>> GetStudentCourses(int id);
         public Task<List<StudentCourse>> GetStudentResultsByStdId(int stdId);
-        public Task<Exam> GetResultDetailsByStdId(int stdId , int crsId);
+        public Task<Exam> GetResultExam(int stdId , int crsId);
         public Task<List<string>> StudentAnswer(int examId, int studentId);
         public List<List<string>> ExamQuestionOptions(List<ExamQuestion> examQuestion);
         public List<string> ExamQuestionAnswers(List<ExamQuestion> examQuestion);
@@ -157,7 +157,7 @@ namespace Examination_System.Repos
                 return null;
             }
         }
-		public async Task<Exam> GetResultDetailsByStdId(int stdId , int crsId)
+		public async Task<Exam> GetResultExam(int stdId , int crsId)
 		{
 			var StdExam = await db.StudentExams.FirstOrDefaultAsync(se => se.StdId == stdId);
 			if (StdExam != null)

@@ -124,7 +124,7 @@ namespace Examination_System.Controllers
         {
             try
             {
-				Exam exam = await SRepo.GetResultDetailsByStdId(id, crsId);
+				Exam exam = await SRepo.GetResultExam(id, crsId);
                 List<ExamQuestion> examQuestions =[.. exam.ExamQuestions];
                 List<string> questions= new List<string>();
                 foreach (var item in examQuestions)
