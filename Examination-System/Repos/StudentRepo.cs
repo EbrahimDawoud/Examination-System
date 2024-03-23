@@ -12,7 +12,7 @@ namespace Examination_System.Repos
         public Task<Exam> GetExamByCrsId(int crsId);
         public Task<Exam> GetExamById(int examId);
         public Task<bool> SubmitExam(int examId, int studentId, List<StudentAnswer> studentAnswers);
-        public Task<StudentExam> GetStudentExamDegree(int examId, int studentId);
+        public Task<StudentCourse> GetStudentCourseDegree(int examId, int studentId);
         public Task<bool> IsStudentExamSubmitted(int examId, int studentId);
         public Task<List<StudentCourse>> GetStudentCourses(int id);
         public Task<List<StudentCourse>> GetStudentResultsByStdId(int stdId);
@@ -56,37 +56,47 @@ namespace Examination_System.Repos
             }
         }
 
-        public async Task<bool> SubmitExam(int examId, int studentId , List<StudentAnswer> studentAnswers) //submit the exam
+        public async Task<bool> SubmitExam(int examId, int studentId, List<StudentAnswer> studentAnswers) //submit the exam
         {
-            int grade = 0;
+            //int grade = 0;
             //float finalGrade = db.ExamQuestions.Where(eq => eq.ExamId == studentAnswers[0].ExamId).Sum(eq => eq.Degree); //get the total degree of the exam
             
             try
             {
                 foreach (var answer in studentAnswers)
                 {
-                    var questionGrade = await db.ExamQuestions.Where(eq => eq.ExamId == answer.ExamId && eq.QuestionId == answer.QuestionId).Select(eq => eq.Degree).FirstOrDefaultAsync(); //get the degree of the question
-                    if(answer.SelectedOption == 1)
-                    {
-                        grade += questionGrade; //add the degree of the question to the total grade
-                    }
+                    //var questionGrade = await db.ExamQuestions.Where(eq => eq.ExamId == answer.ExamId && eq.QuestionId == answer.QuestionId).Select(eq => eq.Degree).FirstOrDefaultAsync(); //get the degree of the question
+                    //if (answer.SelectedOption == 1)
+                    //{
+                    //    grade += questionGrade; //add the degree of the question to the total grade
+                    //}
                     db.StudentAnswers.Add(answer);
                 }
 
                 await db.SaveChangesAsync();
 
-
-                StudentExam studentExam = new StudentExam
+                var sqlParams = new SqlParameter[]
                 {
-                    ExamId = examId,
-                    StdId = studentId,
-                    ExamDate = DateOnly.FromDateTime(DateTime.Now),
-                    Grade = grade
+                    new SqlParameter("@exam_id", examId),
+                    new SqlParameter("@std_id", studentId)
                 };
 
-                db.StudentExams.Add(studentExam);
+                await db.Database.ExecuteSqlRawAsync("EXECUTE CorrectExam @exam_id, @std_id", sqlParams);
 
-                await db.SaveChangesAsync();
+
+                //StudentExam studentExam = new StudentExam
+                //{
+                //    ExamId = examId,
+                //    StdId = studentId,
+                //    ExamDate = DateOnly.FromDateTime(DateTime.Now),
+                //    Grade = grade
+                //};
+
+                //db.StudentExams.Add(studentExam);
+
+                //await db.SaveChangesAsync();
+
+
 
                 return true;
             }
@@ -97,11 +107,12 @@ namespace Examination_System.Repos
             }
         }
         
-        public async Task<StudentExam> GetStudentExamDegree(int examId, int studentId) //get the student exam degree
+        public async Task<StudentCourse> GetStudentCourseDegree(int examId, int studentId) //get the student exam degree
         {
             try
             {
-                return await db.StudentExams.Where(se => se.ExamId == examId && se.StdId == studentId).FirstOrDefaultAsync();
+                int CrsId = GetExamById(examId).Result.CrsId;
+                return await db.StudentCourses.Where(se => se.CrsId == CrsId && se.StudentId == studentId).FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {
@@ -114,7 +125,8 @@ namespace Examination_System.Repos
         {
             try
             {
-                return await db.StudentExams.AnyAsync(se => se.ExamId == examId && se.StdId == studentId);
+                int CrsId = GetExamById(examId).Result.CrsId;
+                return await (db.StudentCourses.AnyAsync(se => se.CrsId == CrsId && se.StudentId == studentId && se.Grade != null));
             }
             catch (Exception ex)
             {

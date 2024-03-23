@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Exam";
-    var student_id = 5; // Replace with the actual student id
 }
 
 
@@ -20,6 +19,6 @@ else
     </div>
 
     <form class="text-center" method="post" asp-action="TakeExam">
-            <input type="submit" class="btn btn-success mt-3" value="Start Exam" asp-route-examID="@Model.ExamId" asp-route-studentId="@student_id">
+            <input type="submit" class="btn btn-success mt-3" value="Start Exam" asp-route-examID="@Model.ExamId" >
     </form>
 }

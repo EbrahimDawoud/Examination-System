@@ -24,7 +24,6 @@ namespace Examination_System.Controllers
         public IActionResult Exam(int crsId)
         {
             Exam exam = SRepo.GetExamByCrsId(crsId).Result;
-
             if (exam != null) //check if the exam exists
             {
                 return View(exam);
@@ -38,9 +37,11 @@ namespace Examination_System.Controllers
 
         [HttpPost]
         [ActionName("exam")]
-        public IActionResult TakeExam(int examId, int studentId)
+        public IActionResult TakeExam(int examId)
         {
             Exam exam = SRepo.GetExamById(examId).Result;
+
+            int studentId = URepo.GetUserId(User);
 
             if (SRepo.IsStudentExamSubmitted(examId, studentId).Result) // check if the student submitted the exam
             {
@@ -62,7 +63,7 @@ namespace Examination_System.Controllers
         {
             if (SRepo.IsStudentExamSubmitted(examId, studentId).Result) // check if the student submitted the exam
             {
-                return View(SRepo.GetStudentExamDegree(examId, studentId).Result);
+                return View(SRepo.GetStudentCourseDegree(examId, studentId).Result);
             }
             else
             {
@@ -72,9 +73,10 @@ namespace Examination_System.Controllers
         }
 
         [HttpPost]
-        public IActionResult Result(int examId,int studentId, Dictionary<int, int> studentAnswers)
+        public IActionResult Result(int examId, Dictionary<int, int> studentAnswers)
         {
             List<StudentAnswer> studentAnswersList = new List<StudentAnswer>();
+            int studentId = URepo.GetUserId(User);
 
             foreach (var item in studentAnswers)
             {
@@ -91,7 +93,7 @@ namespace Examination_System.Controllers
 
             if (result) //submit the exam
             {
-                StudentExam studentResult = SRepo.GetStudentExamDegree(examId, studentId).Result;
+                StudentCourse studentResult = SRepo.GetStudentCourseDegree(examId, studentId).Result;
                 return View(studentResult);
             }
             else
