@@ -5,11 +5,10 @@ ViewData["Title"] = "TakeExam";
 
 var ExamQuestions = Model.ExamQuestions.OrderBy(x => Guid.NewGuid()).ToList(); // Randomize the questions
 
-var student_id = 5; // Replace with the actual student id
 }
 <h1>@Model.Crs.CrsName Exam</h1>
 
-<form method="post" action="/Student/Result?examId=@Model.ExamId&studentId=@student_id">
+<form method="post" action="/Student/Result?examId=@Model.ExamId">
         @foreach(var question in ExamQuestions)
         {
             
