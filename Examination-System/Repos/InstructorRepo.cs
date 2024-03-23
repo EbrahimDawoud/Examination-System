@@ -99,6 +99,13 @@ namespace Examination_System.Repos
 
             try
             {
+                //check if at least one question is available
+                if (noOfMCQ == 0 && noOfTF == 0)
+                {
+                    throw new Exception("At least one question should be added to the exam");
+                }
+
+
                 int noOfMCQInCourse = db.Questions.Count(q => q.CrsId == exam.CrsId && q.QuestionType == "MCQ");
                 int noOfTFInCourse = db.Questions.Count(q => q.CrsId == exam.CrsId && q.QuestionType == "TF");
 
@@ -172,7 +179,7 @@ namespace Examination_System.Repos
             {
                 
                 //get students degrees in this exam
-                var studentsDegrees = await db.StudentCourses.Where(se => se.CrsId == 20).Include(se => se.Student)
+                var studentsDegrees = await db.StudentCourses.Where(se => se.CrsId == crsId).Include(se => se.Student)
                     .Select(se => new StudentDegree
                     {
                         StudentId = se.StudentId,
