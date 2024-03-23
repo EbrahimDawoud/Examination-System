@@ -67,7 +67,7 @@ namespace Examination_System.Repos
         
         public IQueryable<GetExamChoices> GetExamChoices(int stdId)
         {
-            var data = db.Database.SqlQuery<GetExamChoices>($"get_exam_questions_with_choices {stdId}");
+            var data = db.Database.SqlQuery<GetExamChoices>($"sp_get_exam_questions_with_choices {stdId}");
 
             return data;
         }
