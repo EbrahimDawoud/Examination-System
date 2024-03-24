@@ -21,6 +21,7 @@ namespace Examination_System.Repos
         public List<List<string>> ExamQuestionOptions(List<ExamQuestion> examQuestion);
         public List<string> ExamQuestionAnswers(List<ExamQuestion> examQuestion);
         public Task MarkExam(int examId, int studentId);
+        public Task<User> GetUserById(int id);
 
     }
 
@@ -284,6 +285,18 @@ namespace Examination_System.Repos
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+        public async Task<User> GetUserById(int id)
+        {
+			try
+            {
+				return await db.Users.Where(u => u.UserId == id).Include(s=>s.Student).ThenInclude(s=>s.StudentCourses).ThenInclude(s=>s.Crs).FirstOrDefaultAsync();
+			}
+			catch (Exception ex)
+            {
+				Console.WriteLine(ex.Message);
+				return null;
+			}
         }
     }
 }

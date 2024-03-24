@@ -18,9 +18,12 @@ namespace Examination_System.Controllers
             URepo = _URepo;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+			var stdResults = await SRepo.GetStudentResultsByStdId(URepo.GetUserId(User));
+            ViewBag.stdResults = stdResults;
+			User std = SRepo.GetUserById(URepo.GetUserId(User)).Result;
+			return View(std);
         }
 
         [HttpGet]
@@ -118,10 +121,6 @@ namespace Examination_System.Controllers
         public async Task<IActionResult> Results()
         {
             List<StudentCourse> stdResults = await SRepo.GetStudentResultsByStdId(URepo.GetUserId(User));
-            foreach (var item in stdResults)
-            {
-                Console.WriteLine(item);
-            }
             return View(stdResults);
         }
         public async Task<IActionResult> ResultDetails(int id, int crsId)
