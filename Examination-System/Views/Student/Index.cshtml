@@ -8,10 +8,13 @@
 <h1 class="">Welcome to Student Dashboard</h1>
 	<p>Here you can view your courses, exams, and grades.</p>
 </div>
-
+<div class="text-center">
+	<h3>Student Information</h3>
+</div>
+<hr />
 <div>
-	<table class="table table-light">
-<tr>
+	<table class="table table-active table-hover">
+		<tr>
 			<td>
 				<h5>Student Name: @Model.UserName</h5>
 			</td>
@@ -37,10 +40,10 @@
 		</tr>
 	</table>
 </div>
-<div class="d-flex align-content-between">
+<div class="row">
 	@foreach (var item in stdResults)
 	{
-		<div class="d-flex bg-danger text-white p-4 m-4 rounded-3">
+		<div style="color:white;background-color:#9D282F" class="d-flex  text-white p-4 m-4 rounded-3 col-5">
 			<div class="m-3">
 				<h3>@item.Crs.CrsName</h3>
 				<p>Course hours = 18 </p>
@@ -53,5 +56,3 @@
 		</div>
 	}
 </div>
-		
-
