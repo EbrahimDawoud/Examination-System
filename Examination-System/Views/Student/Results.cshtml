@@ -20,9 +20,9 @@
 			@foreach (var item in Model)
 			{
 				<tr>
-					<td>@item.Crs.CrsName</td>
-					<td>@item.Grade</td>
-                    <td>@item.Crs.CrsGrade</td>
+                    <td><h5>@item.Crs.CrsName</h5></td>
+                    <td><h5>@item.Grade</h5></td>
+                    <td><h5>@item.Crs.CrsGrade</h5></td>
                     <td><a class="btn btn-primary" asp-controller="Student" asp-action="ResultDetails" asp-route-id="@item.StudentId" asp-route-crsId="@item.CrsId">Details</a></td>
 				</tr>
 			}
