@@ -12,8 +12,8 @@ namespace Examination_System.Repos
         public IQueryable<GetStudentsByDeptNum> GetStudentsByDeptNums(int deptNum);
 
         public IQueryable<GetCourseTopic> GetCourseTopics(int crsId);
+        public IQueryable<GetExamAnswrs> get_exam_questions_with_student_answers(int ExamId, int stdId);
 
-        public IQueryable<GetExamAnswrs> get_exam_questions_with_student_answers(int examNum, int stdId);
             public IQueryable<GetExamChoices> GetExamChoices(int ExamId);
     }
     public class ReportsRepo:IReportsRepo
@@ -56,9 +56,10 @@ namespace Examination_System.Repos
         }
 
 
-        public IQueryable<GetExamAnswrs> get_exam_questions_with_student_answers(int examNum, int stdId )
+        public IQueryable<GetExamAnswrs> get_exam_questions_with_student_answers(int ExamId, int stdId )
         {
-            var data = db.Database.SqlQuery<GetExamAnswrs>($"sp_get_exam_questions_with_student_answers {examNum} , {stdId}");
+            var data = db.Database.SqlQuery<GetExamAnswrs>($"sp_get_exam_questions_with_student_answers {ExamId} , {stdId}");
+
 
             return data;
         }

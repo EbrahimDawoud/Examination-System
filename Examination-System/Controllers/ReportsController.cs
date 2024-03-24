@@ -30,7 +30,7 @@ namespace Examination_System.Controllers
             //Set the standard font.
             PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
             //Draw the text.
-            graphics.DrawString("7asona", font, PdfBrushes.Black, new PointF(0, 0));
+            graphics.DrawString("ITIReports", font, PdfBrushes.Black, new PointF(200, 300));
             //Create a PdfGrid.
             PdfGrid pdfGrid = new PdfGrid();
             //Saving the PDF to the MemoryStream.
@@ -53,7 +53,7 @@ namespace Examination_System.Controllers
             // Defining the ContentType for pdf file.
             string contentType = "application/pdf";
             //Define the file name.
-            string fileName = "Output.pdf";
+            string fileName = "AllStudntAndCourses.pdf";
             //Creates a FileContentResult object by using the file contents, content type, and file name.
             return File(stream, contentType, fileName);
 
@@ -73,7 +73,7 @@ namespace Examination_System.Controllers
             //Set the standard font.
             PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
             //Draw the text.
-            graphics.DrawString("7asona", font, PdfBrushes.Black, new PointF(0, 0));
+            graphics.DrawString("ITIReports", font, PdfBrushes.Black, new PointF(200, 300));
             //Create a PdfGrid.
             PdfGrid pdfGrid = new PdfGrid();
             //Saving the PDF to the MemoryStream.
@@ -96,7 +96,7 @@ namespace Examination_System.Controllers
             // Defining the ContentType for pdf file.
             string contentType = "application/pdf";
             //Define the file name.
-            string fileName = "Output.pdf";
+            string fileName = "Grades.pdf";
             //Creates a FileContentResult object by using the file contents, content type, and file name.
             return File(stream, contentType, fileName);
 
@@ -116,7 +116,7 @@ namespace Examination_System.Controllers
             //Set the standard font.
             PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
             //Draw the text.
-            graphics.DrawString("7asona", font, PdfBrushes.Black, new PointF(0, 0));
+            graphics.DrawString("ITIReports", font, PdfBrushes.Black, new PointF(200, 300));
             //Create a PdfGrid.
             PdfGrid pdfGrid = new PdfGrid();
             //Saving the PDF to the MemoryStream.
@@ -139,7 +139,7 @@ namespace Examination_System.Controllers
             // Defining the ContentType for pdf file.
             string contentType = "application/pdf";
             //Define the file name.
-            string fileName = "Output.pdf";
+            string fileName = "AllStudents.pdf";
             //Creates a FileContentResult object by using the file contents, content type, and file name.
             return File(stream, contentType, fileName);
 
@@ -159,7 +159,7 @@ namespace Examination_System.Controllers
             //Set the standard font.
             PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
             //Draw the text.
-            graphics.DrawString("7asona", font, PdfBrushes.Black, new PointF(200, 100));
+            graphics.DrawString("ITIReports", font, PdfBrushes.Black, new PointF(200, 100));
             //Create a PdfGrid.
             PdfGrid pdfGrid = new PdfGrid();
             //Saving the PDF to the MemoryStream.
@@ -182,7 +182,7 @@ namespace Examination_System.Controllers
             // Defining the ContentType for pdf file.
             string contentType = "application/pdf";
             //Define the file name.
-            string fileName = "Output.pdf";
+            string fileName = "CourseTopics.pdf";
             //Creates a FileContentResult object by using the file contents, content type, and file name.
             return File(stream, contentType, fileName);
 
@@ -191,9 +191,9 @@ namespace Examination_System.Controllers
 
         //////////exam questions with student answers report////////
 
-        public IActionResult get_exam_questions_with_student_answers(int examNum, int stdId)
+        public IActionResult get_exam_questions_with_student_answers(int ExamId, int stdId)
         {
-            var data = reportsRepo.get_exam_questions_with_student_answers(examNum, stdId);
+            var data = reportsRepo.get_exam_questions_with_student_answers(ExamId, stdId);
             //Create a new PDF document.
             PdfDocument document = new PdfDocument();
             //Add a page to the document.
@@ -203,7 +203,7 @@ namespace Examination_System.Controllers
             //Set the standard font.
             PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
             //Draw the text.
-            graphics.DrawString("7asona", font, PdfBrushes.Black, new PointF(200, 100));
+            graphics.DrawString("ITI Reports", font, PdfBrushes.Black, new PointF(200, 100));
             //Create a PdfGrid.
             PdfGrid pdfGrid = new PdfGrid();
             //Saving the PDF to the MemoryStream.
@@ -226,7 +226,7 @@ namespace Examination_System.Controllers
             // Defining the ContentType for pdf file.
             string contentType = "application/pdf";
             //Define the file name.
-            string fileName = "Output.pdf";
+            string fileName = "StudentAnswer.pdf";
             //Creates a FileContentResult object by using the file contents, content type, and file name.
             return File(stream, contentType, fileName);
 
@@ -245,7 +245,7 @@ namespace Examination_System.Controllers
             //Set the standard font.
             PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
             //Draw the text.
-            graphics.DrawString("7asona", font, PdfBrushes.Black, new PointF(200, 100));
+            graphics.DrawString("ITI Reports", font, PdfBrushes.Black, new PointF(200, 300));
             //Create a PdfGrid.
             PdfGrid pdfGrid = new PdfGrid();
             //Saving the PDF to the MemoryStream.
@@ -268,7 +268,7 @@ namespace Examination_System.Controllers
             // Defining the ContentType for pdf file.
             string contentType = "application/pdf";
             //Define the file name.
-            string fileName = "Output.pdf";
+            string fileName = "ExamChoices.pdf";
             //Creates a FileContentResult object by using the file contents, content type, and file name.
             return File(stream, contentType, fileName);
 
