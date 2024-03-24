@@ -286,6 +286,15 @@
                                     Show Results
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 @((ViewBag.Title == "GenerateReports") ? "active" : "")"
+                                   asp-controller="Instructor"
+                                   asp-action="GenerateReports"
+                                   data-link="Generate Exam">
+                                    <svg class="bi"><use xlink:href="#file-earmark" /></svg>
+                                    Generate Reports
+                                </a>
+                            </li>
 
 
                         </ul>

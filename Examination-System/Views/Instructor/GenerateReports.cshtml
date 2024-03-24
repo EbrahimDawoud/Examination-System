@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewData["Title"] = "GenerateReports";
+    var Students = ViewBag.Students;
+    var instructors=ViewBag.Instructors;
+    var Departments = ViewBag.Departments;
+    var Courses = ViewBag.Courses;
+    var Exams = ViewBag.Exams;
+}
+
+<h1>Generate Reports</h1>
+<div class="d-block">
+    <div class="m-2">
+        <select>
+			<option value="">Select Instructor</option>
+			@foreach (var instructor in instructors)
+			{
+                <option value="@instructor.UserId">@instructor.UserName</option>
+			}
+        </select>
+        <a class="btn btn-danger " asp-controller="Reports" asp-action="GetInstCoursAndStdReport" asp-route-instId="">Instructor Courses and students</a>
+    </div>
+    <div class="m-2">
+<select>
+<option value="">Select Department</option>
+@foreach (var dept in Departments)
+{
+                <option value="@dept.DepId">@dept.DepName</option>
+}
+</select>
+        <a class="btn btn-danger " asp-controller="Reports" asp-action="GetStudentsByDeptNums" asp-route-deptNum=""> Students By Department</a>
+    </div>
+    <div class="m-2">
+<select>
+<option value="">Select Course</option>
+@foreach (var course in Courses)
+{
+                <option value="@course.CrsId">@course.CrsName</option>
+}
+</select>
+        <a class="btn btn-danger" asp-controller="Reports" asp-action="GetCourseTopics" asp-route-crsId=""> Course Topics</a>
+    </div>
+    <div class="m-2">
+        <a class="btn btn-danger" asp-controller="Reports" asp-action="get_exam_questions_with_student_answers" asp-route-examNum="" asp-route-stdId=""> Exam Questions with Student Answers</a>
+    </div>
+    <div class="m-2">
+        <a class="btn btn-danger " asp-controller="Reports" asp-action="GetExamChoices" asp-route-stdId=""> Exam Choices</a>
+    </div>
+</div>
+

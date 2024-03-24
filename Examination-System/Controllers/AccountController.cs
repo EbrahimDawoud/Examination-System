@@ -68,17 +68,4 @@ namespace Examination_System.Controllers
 			return RedirectToAction("Login");
 		}
 	}
-	
-
-	/*if (userRepo.IsUserCredentialsValid(UserName, UserPass).Result) //check if the user credentials are valid
-	{
-		return RedirectToAction("Index", "Home");
-	}
-	else
-	{
-		ViewBag.Message = "Invalid Credentials";
-		return PartialView("ErrorInLogin");
-	}*/
-
-
 }

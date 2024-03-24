@@ -3,9 +3,11 @@
     ViewData["Title"] = "Results";
     Layout = "~/Views/Shared/_StudentLayout.cshtml";
 }
-
+<div class="m-2">
+    <a class="btn btn-outline-dark float-end" asp-controller="Reports" asp-action="GetStudentGradesReport" asp-route-stdId="@Model.ToList()[0].StudentId">DownLoad Report</a>
+</div>
 <div>
-    <table class="table table-active">
+    <table class="table table-active table-hover text-center mt-4">
         <thead>
             <tr>
                 <th>Course Name</th>
