@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewData["Title"] = "GenerateReports";
+    var Students = ViewBag.Students;
+    var instructors=ViewBag.Instructors;
+    var Departments = ViewBag.Departments;
+    var Courses = ViewBag.Courses;
+    var studentExams = ViewBag.studentExams;
+    var Exams = ViewBag.Exams;
+    var ExamQustions = ViewBag.examQuestions;
+}
+
+<h1>Generate Reports</h1>
+<div class="d-block">
+    <div class="m-2">
+        <select id="instructorSelect">
+            <option value="">Select Instructor</option>
+            @foreach (var instructor in instructors)
+            {
+                <option value="@instructor.UserId">@instructor.UserName</option>
+            }
+        </select>
+        <a id="instructorReportLink" class="btn btn-danger" asp-controller="Reports" asp-action="GetInstCoursAndStdReport" asp-route-instId="">Instructor Courses and Students</a>
+        </div>
+    <div class="m-2">
+<select id="Deptselect">
+<option value="">Select Department</option>
+@foreach (var dept in Departments)
+{
+                <option value="@dept.DepId">@dept.DepName</option>
+}
+</select>
+        <a id="DepratmentReport" class="btn btn-danger " asp-controller="Reports" asp-action="GetStudentsByDeptNums" asp-route-deptNum=""> Students By Department</a>
+    </div>
+
+
+    <div class="m-2">
+<select id="CourseSelect">
+<option value="">Select Course</option>
+@foreach (var course in Courses)
+{
+                <option value="@course.CrsId">@course.CrsName</option>
+}
+</select>
+        <a id="CourseTopicReports"  class="btn btn-danger" asp-controller="Reports" asp-action="GetCourseTopics" asp-route-crsId=""> Course Topics</a>
+    </div>
+    
+    <div class="m-2">
+        <select id="examSelect">
+            <option value="">ExamId</option>
+            @foreach (var exam in studentExams)
+            {
+                <option value="@exam.ExamId">@exam.ExamId</option>
+            }
+        </select>
+        <select id="studentSelect">
+            <option value="">StudentId</option>
+            @foreach (var student in studentExams)
+            {
+                <option value="@student.StdId">@student.StdId</option>
+            }
+        </select>
+        <a  class="btn btn-danger" asp-controller="Reports" asp-action="get_exam_questions_with_student_answers" asp-route-examNum="1" asp-route-stdId="2">Exam Questions with Student Answers</a>
+    </div>
+
+
+    <div class="m-2">
+        <select id="studentSelectChoice">
+            <option value="">StudentId</option>
+            @foreach (var ExamNum in Exams  )
+            {
+                <option value="@ExamNum.ExamId">@ExamNum.ExamId</option>
+            }
+        </select>
+        <a id="ExamChoice" class="btn btn-danger " asp-controller="Reports" asp-action="GetExamChoices" asp-route-ExamId="3"> Exam Choices</a>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#instructorSelect").change(function () {
+                var instId = $(this).val();
+                $("#instructorReportLink").attr("href", "/Reports/GetInstCoursAndStdReport?instId=" + instId);
+
+            });
+            $("#Deptselect").change(function () {
+                var deptNum = $(this).val();
+                $("#DepratmentReport").attr("href", "/Reports/GetStudentsByDeptNums?deptNum=" + deptNum);
+            });
+            $("#CourseSelect").change(function () {
+                var crsId = $(this).val();
+                $("#CourseTopicReports").attr("href", "/Reports/GetCourseTopics?crsId=" + crsId);
+            });
+
+            $("#examSelect").change(function () {
+
+                var examNum = $(this).val();
+                $("#examQuestionsLink").attr("href", "/Reports/get_exam_questions_with_student_answers?examNum" + examNum)  
+            }
+
+            )
+
+
+            $("#studentSelect").change(function () {
+
+                var stdId = $(this).val();
+                $("#examQuestionsLink").attr("href", "/Reports/get_exam_questions_with_student_answers?stdId" + stdId)
+            }
+            )
+
+
+            $("#studentSelectChoice").change(function () {
+
+                var ExamId = $(this).val();
+                $("#examQuestionsLink").attr("href", "/Reports/GetExamChoices?examNum" + examNum)
+            }
+            )
+
+        });
+    </script>
+}
+```

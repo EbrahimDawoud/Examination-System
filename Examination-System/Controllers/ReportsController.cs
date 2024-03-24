@@ -233,9 +233,9 @@ namespace Examination_System.Controllers
 
         }
         //////////exam questions with student Choices report////////
-        public IActionResult GetExamChoices(int stdId)
+        public IActionResult GetExamChoices(int ExamId)
         {
-            var data = reportsRepo.GetExamChoices(stdId);
+            var data = reportsRepo.GetExamChoices(ExamId);
             //Create a new PDF document.
             PdfDocument document = new PdfDocument();
             //Add a page to the document.

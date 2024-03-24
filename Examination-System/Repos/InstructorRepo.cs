@@ -24,7 +24,24 @@ namespace Examination_System.Repos
 
         public Task<List<StudentDegree>> GetStudentsResultByCourse(int crsId);
 
+        // get all students
+        public Task<List<User>> GetStudents();
 
+        // get all instructors
+        public Task<List<User>> GetInstructors();
+
+        // get all departments
+        public Task<List<Department>> GetDepartments();
+
+        // get all courses
+        public Task<List<Course>> GetCourses();
+
+        // get all exams
+        public Task<List<StudentExam>> GetExams();
+
+        public Task<List<Exam>> Exams();
+
+        public Task<List<ExamQuestion>> ExamQuestions();
 
     }
     public class InstructorRepo : IInstructorRepo
@@ -202,5 +219,93 @@ namespace Examination_System.Repos
             }
 
         }
+        public async Task<List<User>> GetStudents ()
+        {
+            try
+            {
+                return await db.Users.Where(u => u.UserRole == "Student").ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }       
+        }
+        public async Task<List<User>> GetInstructors()
+        {
+            try
+            {
+                return await db.Users.Where(u => u.UserRole == "Instructor").ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+        public async Task<List<Department>> GetDepartments()
+        {
+            try
+            {
+                return await db.Departments.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+        public async Task<List<Course>> GetCourses()
+        {
+            try
+            {
+                return await db.Courses.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }   
+        public async Task<List<StudentExam>> GetExams()
+        {
+            try
+            {
+                return await db.StudentExams.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+        public async Task<List<Exam>> Exams()
+        {
+            try
+            {
+                return await db.Exams.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        public async Task<List<ExamQuestion>> ExamQuestions()
+
+        {
+            try
+            {
+                return await db.ExamQuestions.ToListAsync();
+            }
+                       catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+
     }
 }

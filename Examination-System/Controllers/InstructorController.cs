@@ -16,10 +16,12 @@ namespace Examination_System.Controllers
     public class InstructorController : Controller
     {
         private readonly IInstructorRepo instructorRepo;
+        private readonly IUserRepo userRepo;
 
-        public InstructorController(IInstructorRepo _instructorRepo)
+        public InstructorController(IInstructorRepo _instructorRepo, IUserRepo _userRepo)
         {
             instructorRepo = _instructorRepo;
+            userRepo = _userRepo;
         }
 
         [HttpGet]
@@ -28,7 +30,7 @@ namespace Examination_System.Controllers
 
             // get the courses for this signed in instructor and send them to the view
 
-            var courses = instructorRepo.GetInstructorCourses(6).Result;
+            var courses = instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result;
             ViewBag.courses = new SelectList(courses, "CrsId", "CrsName");
 
             return View(new Question());
@@ -51,7 +53,7 @@ namespace Examination_System.Controllers
             if (questionId == -1)
             {
                 ModelState.AddModelError("", "Error in adding the question");
-                ViewBag.courses = new SelectList(instructorRepo.GetInstructorCourses(6).Result, "CrsId", "CrsName");//change with the signed in instructor id
+                ViewBag.courses = new SelectList(instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result, "CrsId", "CrsName");//change with the signed in instructor id
                 return View(question);
 
             }
@@ -69,7 +71,7 @@ namespace Examination_System.Controllers
         public IActionResult GenerateRandomExam()
         {
             // get the courses for this signed in instructor and send them to the view
-            var courses = instructorRepo.GetInstructorCourses(6).Result;
+            var courses = instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result;
             ViewBag.courses = new SelectList(courses, "CrsId", "CrsName");
             return View(new Exam());
         }
@@ -98,7 +100,7 @@ namespace Examination_System.Controllers
         public async Task<IActionResult> ShowResults()
         {
 
-            var courses = await instructorRepo.GetInstructorCourses(6);
+            var courses = await instructorRepo.GetInstructorCourses(userRepo.GetUserId(User));
 
             ViewBag.courses = new SelectList(courses, "CrsId", "CrsName");
 
@@ -110,6 +112,25 @@ namespace Examination_System.Controllers
 
             var students = await instructorRepo.GetStudentsResultByCourse(crsId);
             return PartialView(students);
+        }
+
+        public async Task<IActionResult> GenerateReports()
+        {
+            var students = await instructorRepo.GetStudents();
+            var Instructors = await instructorRepo.GetInstructors();
+            var Departments = await instructorRepo.GetDepartments();
+            var Courses = await instructorRepo.GetCourses();
+            var studentExams = await instructorRepo.GetExams();
+            var Exams = await instructorRepo.Exams();
+            var ExamQuestions = await instructorRepo.ExamQuestions();
+            ViewBag.students = students;
+            ViewBag.instructors = Instructors;
+            ViewBag.departments = Departments;
+            ViewBag.courses = Courses;
+            ViewBag.studentExams = studentExams;
+            ViewBag.exams = Exams;
+            ViewBag.examQuestions = ExamQuestions;
+            return View();
         }
 
     }
