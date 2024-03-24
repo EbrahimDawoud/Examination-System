@@ -60,19 +60,19 @@
                 <option value="@student.StdId">@student.StdId</option>
             }
         </select>
-        <a  class="btn btn-danger" asp-controller="Reports" asp-action="get_exam_questions_with_student_answers" asp-route-examNum="1" asp-route-stdId="2">Exam Questions with Student Answers</a>
+        <a id="ExamQuestions"  class="btn btn-danger" asp-controller="Reports" asp-action="get_exam_questions_with_student_answers" asp-route-examNum="" , asp-route-stdId="">Exam Questions with Student Answers</a>
     </div>
 
 
     <div class="m-2">
-        <select id="studentSelectChoice">
-            <option value="">StudentId</option>
+        <select id="ExamSelectChoice">
+            <option value="">ExamId</option>
             @foreach (var ExamNum in Exams  )
             {
                 <option value="@ExamNum.ExamId">@ExamNum.ExamId</option>
             }
         </select>
-        <a id="ExamChoice" class="btn btn-danger " asp-controller="Reports" asp-action="GetExamChoices" asp-route-ExamId="3"> Exam Choices</a>
+        <a id="ExamChoice" class="btn btn-danger " asp-controller="Reports" asp-action="GetExamChoices" asp-route-ExamId=""> Exam Choices</a>
     </div>
 </div>
 
@@ -103,7 +103,7 @@
             $("#examSelect").change(function () {
 
                 var examNum = $(this).val();
-                $("#examQuestionsLink").attr("href", "/Reports/get_exam_questions_with_student_answers?examNum" + examNum)  
+                $("#ExamQuestions").attr("href", "/Reports/get_exam_questions_with_student_answers?examNum=" + examNum)
             }
 
             )
@@ -112,17 +112,15 @@
             $("#studentSelect").change(function () {
 
                 var stdId = $(this).val();
-                $("#examQuestionsLink").attr("href", "/Reports/get_exam_questions_with_student_answers?stdId" + stdId)
+                $("#ExamQuestions").attr("href", "/Reports/get_exam_questions_with_student_answers?stdId=" + stdId)
             }
             )
 
 
-            $("#studentSelectChoice").change(function () {
-
-                var ExamId = $(this).val();
-                $("#examQuestionsLink").attr("href", "/Reports/GetExamChoices?examNum" + examNum)
-            }
-            )
+            $("#ExamSelectChoice").change(function () {
+                var ExmaId = $(this).val();
+                $("#ExamChoice").attr("href","/Reports/GetExamChoices?ExamId=" + ExmaId);
+            })
 
         });
     </script>
