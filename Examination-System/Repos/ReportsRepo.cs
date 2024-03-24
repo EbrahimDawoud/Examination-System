@@ -13,8 +13,8 @@ namespace Examination_System.Repos
 
         public IQueryable<GetCourseTopic> GetCourseTopics(int crsId);
 
-        public IQueryable<GetExamAnswrs> get_exam_questions_with_student_answers(int examId, int stdId);
-            public IQueryable<GetExamChoices> GetExamChoices(int stdId);
+        public IQueryable<GetExamAnswrs> get_exam_questions_with_student_answers(int examNum, int stdId);
+            public IQueryable<GetExamChoices> GetExamChoices(int ExamId);
     }
     public class ReportsRepo:IReportsRepo
     {
@@ -56,18 +56,18 @@ namespace Examination_System.Repos
         }
 
 
-        public IQueryable<GetExamAnswrs> get_exam_questions_with_student_answers(int examId , int stdId )
+        public IQueryable<GetExamAnswrs> get_exam_questions_with_student_answers(int examNum, int stdId )
         {
-            var data = db.Database.SqlQuery<GetExamAnswrs>($"sp_get_exam_questions_with_student_answers {examId} {stdId}");
+            var data = db.Database.SqlQuery<GetExamAnswrs>($"sp_get_exam_questions_with_student_answers {examNum} , {stdId}");
 
             return data;
         }
 
         ///choices exam id 
         
-        public IQueryable<GetExamChoices> GetExamChoices(int stdId)
+        public IQueryable<GetExamChoices> GetExamChoices(int ExamId)
         {
-            var data = db.Database.SqlQuery<GetExamChoices>($"sp_get_exam_questions_with_choices {stdId}");
+            var data = db.Database.SqlQuery<GetExamChoices>($"sp_get_exam_questions_with_choices {ExamId}");
 
             return data;
         }

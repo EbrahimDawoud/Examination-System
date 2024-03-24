@@ -39,6 +39,10 @@ namespace Examination_System.Repos
         // get all exams
         public Task<List<StudentExam>> GetExams();
 
+        public Task<List<Exam>> Exams();
+
+        public Task<List<ExamQuestion>> ExamQuestions();
+
     }
     public class InstructorRepo : IInstructorRepo
     {
@@ -270,6 +274,32 @@ namespace Examination_System.Repos
                 return await db.StudentExams.ToListAsync();
             }
             catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+        public async Task<List<Exam>> Exams()
+        {
+            try
+            {
+                return await db.Exams.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        public async Task<List<ExamQuestion>> ExamQuestions()
+
+        {
+            try
+            {
+                return await db.ExamQuestions.ToListAsync();
+            }
+                       catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return null;

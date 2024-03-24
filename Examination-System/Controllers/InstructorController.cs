@@ -120,12 +120,16 @@ namespace Examination_System.Controllers
             var Instructors = await instructorRepo.GetInstructors();
             var Departments = await instructorRepo.GetDepartments();
             var Courses = await instructorRepo.GetCourses();
-            var exams = await instructorRepo.GetExams();
+            var studentExams = await instructorRepo.GetExams();
+            var Exams = await instructorRepo.Exams();
+            var ExamQuestions = await instructorRepo.ExamQuestions();
             ViewBag.students = students;
             ViewBag.instructors = Instructors;
             ViewBag.departments = Departments;
             ViewBag.courses = Courses;
-            ViewBag.exams = exams;
+            ViewBag.studentExams = studentExams;
+            ViewBag.exams = Exams;
+            ViewBag.examQuestions = ExamQuestions;
             return View();
         }
 
