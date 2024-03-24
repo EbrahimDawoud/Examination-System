@@ -191,9 +191,9 @@ namespace Examination_System.Controllers
 
         //////////exam questions with student answers report////////
 
-        public IActionResult get_exam_questions_with_student_answers(int examNum, int stdId)
+        public IActionResult get_exam_questions_with_student_answers(int ExamId, int stdId)
         {
-            var data = reportsRepo.get_exam_questions_with_student_answers(examNum, stdId);
+            var data = reportsRepo.get_exam_questions_with_student_answers(ExamId, stdId);
             //Create a new PDF document.
             PdfDocument document = new PdfDocument();
             //Add a page to the document.
