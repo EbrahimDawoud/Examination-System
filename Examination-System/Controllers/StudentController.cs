@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Examination_System.Controllers
 {
-    [Authorize (Roles = "Student")]
+    [Authorize(Roles = "Student")]
     public class StudentController : Controller
     {
         readonly IStudentRepo SRepo; //student repository
@@ -53,6 +53,7 @@ namespace Examination_System.Controllers
 
             if (exam != null) //check if the exam exists
             {
+                SRepo.MarkExam(examId, studentId);
                 return View("TakeExam", exam);
             }
             else
@@ -127,24 +128,25 @@ namespace Examination_System.Controllers
         {
             try
             {
-				Exam exam = await SRepo.GetResultExam(id, crsId);
-                List<ExamQuestion> examQuestions =[.. exam.ExamQuestions];
-                List<string> questions= new List<string>();
+                Exam exam = await SRepo.GetResultExam(id, crsId);
+                List<ExamQuestion> examQuestions = [.. exam.ExamQuestions];
+                List<string> questions = new List<string>();
                 foreach (var item in examQuestions)
                 {
-					questions.Add(item.Question.QuestionText);
-				}
+                    questions.Add(item.Question.QuestionText);
+                }
                 ViewBag.questions = questions;
                 ViewBag.options = SRepo.ExamQuestionOptions(examQuestions);
                 ViewBag.answers = SRepo.ExamQuestionAnswers(examQuestions);
                 ViewBag.StudentAnswers = SRepo.StudentAnswer(exam.ExamId, id).Result;
-				return View(exam);
+                return View(exam);
 
-			}
-			catch (Exception e)
+            }
+            catch (Exception e)
             {
                 return View("Index");
             }
         }
+
     }
 }
