@@ -42,7 +42,7 @@ namespace Examination_System.Repos
         public Task<List<Exam>> Exams();
 
         public Task<List<ExamQuestion>> ExamQuestions();
-        public  Task<bool> EnrollStudent(int studentId, int courseId);
+        public Task<bool> EnrollStudent(int studentId, int courseId);
         public Task<bool> IsStudentEnrolled(int studentId, int courseId);
         public Task<bool> RemoveStudentFromCourseAndAnswers(int studentId, int courseId);
 
@@ -102,15 +102,22 @@ namespace Examination_System.Repos
                     db.QuestionOptions.Add(questionOption);
                 }
 
-                await db.SaveChangesAsync();
+                db.SaveChanges();
+
                 return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 //delete the question if the options are not added
-                db.Questions.Remove(db.Questions.Find(questionId));
-                return false;
+                var question = db.Questions.Find(questionId);
+                if (question != null)
+                {
+
+                    db.Questions.Remove(question);
+                }
+
+                throw;
             }
         }
 
@@ -198,7 +205,7 @@ namespace Examination_System.Repos
         {
             try
             {
-                
+
                 //get students degrees in this exam
                 var studentsDegrees = await db.StudentCourses.Where(se => se.CrsId == crsId).Include(se => se.Student)
                     .Select(se => new StudentDegree
@@ -206,14 +213,14 @@ namespace Examination_System.Repos
                         StudentId = se.StudentId,
                         StudentName =
                             db.Users.Where(u => u.UserId == se.StudentId).Select(u => u.UserName).FirstOrDefault(),
-                        Degree = se.Grade ,
+                        Degree = se.Grade,
                         CrsId = se.CrsId
                     }).ToListAsync();
 
                 //check if the students degrees are available
 
 
-                return  studentsDegrees;
+                return studentsDegrees;
 
 
             }
@@ -224,7 +231,7 @@ namespace Examination_System.Repos
             }
 
         }
-        public async Task<List<User>> GetStudents ()
+        public async Task<List<User>> GetStudents()
         {
             try
             {
@@ -234,9 +241,9 @@ namespace Examination_System.Repos
             {
                 Console.WriteLine(ex.Message);
                 return null;
-            }       
+            }
         }
-       
+
         public async Task<List<User>> GetInstructors()
         {
             try
@@ -272,7 +279,7 @@ namespace Examination_System.Repos
                 Console.WriteLine(ex.Message);
                 return null;
             }
-        }   
+        }
         public async Task<List<StudentExam>> GetExams()
         {
             try
@@ -305,7 +312,7 @@ namespace Examination_System.Repos
             {
                 return await db.ExamQuestions.ToListAsync();
             }
-                       catch (Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return null;
@@ -329,7 +336,7 @@ namespace Examination_System.Repos
             return await db.StudentCourses.AnyAsync(sc => sc.StudentId == studentId && sc.CrsId == courseId);
         }
 
-      
+
 
         public async Task<bool> RemoveStudentFromCourseAndAnswers(int studentId, int courseId)
         {

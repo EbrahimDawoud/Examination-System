@@ -38,8 +38,10 @@ namespace Examination_System.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddQuestion(IFormCollection form, Dictionary<int, string> options = null)
+        public IActionResult AddQuestion(IFormCollection form, Dictionary<int, string> options = null)
         {
+
+
             // get the question data from the form
             var question = new Question
             {
@@ -49,24 +51,70 @@ namespace Examination_System.Controllers
                 QuestionAnswer = int.Parse(form["QuestionAnswer"])
             };
 
+            //check if the question text is empty
+            if (string.IsNullOrEmpty(question.QuestionText))
+            {
+                ViewBag.courses =
+                    new SelectList(instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result, "CrsId",
+                                               "CrsName"); //change with the signed in instructor id
+                ModelState.AddModelError("", "Please fill the question text");
+                return View(question);
+            }
+
+            //check if the question is MCQ and the options are filled
+
+            foreach (var option in options)
+            {
+                if ( question.QuestionType == "MCQ" && string.IsNullOrEmpty(option.Value))
+                {
+                    ViewBag.courses =
+                        new SelectList(instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result,
+                            "CrsId",
+                            "CrsName"); //change with the signed in instructor id
+                    ModelState.AddModelError("", "Please fill all options");
+                    return View(question);
+                }
+            }
+
             // add the question to the database
             var questionId = instructorRepo.AddQuestionToCourse(question).Result;
             if (questionId == -1)
             {
-                ModelState.AddModelError("", "Error in adding the question");
-                ViewBag.courses = new SelectList(instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result, "CrsId", "CrsName");//change with the signed in instructor id
+                ViewBag.courses =
+                    new SelectList(instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result, "CrsId",
+                        "CrsName");
+                ModelState.AddModelError("", "Error adding question to the course");
                 return View(question);
+
 
             }
 
             if (question.QuestionType == "MCQ")
             {
-                instructorRepo.AddQuestionOption(questionId, options);
+                if (!instructorRepo.AddQuestionOption(questionId, options).Result)
+                {
+                    ViewBag.courses =
+                        new SelectList(instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result,
+                            "CrsId",
+                            "CrsName");
+                    ModelState.AddModelError("", "Error adding question options");
+
+                    return View(question);
+                }
 
             }
-            return RedirectToAction("AddQuestion");
+
+            ViewBag.courses =
+                new SelectList(instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result, "CrsId",
+                                       "CrsName");
+            ViewBag.success = "Question added successfully";
+            return View(new Question());
+
 
         }
+
+
+
 
         [HttpGet]
         public IActionResult GenerateRandomExam()
@@ -182,7 +230,7 @@ namespace Examination_System.Controllers
             }
             return RedirectToAction(nameof(ShowResults)); // Adjust as necessary
         }
-       
+
     }
 }
 
