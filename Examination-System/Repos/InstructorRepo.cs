@@ -42,6 +42,10 @@ namespace Examination_System.Repos
         public Task<List<Exam>> Exams();
 
         public Task<List<ExamQuestion>> ExamQuestions();
+        public  Task<bool> EnrollStudent(int studentId, int courseId);
+        public Task<bool> IsStudentEnrolled(int studentId, int courseId);
+        public Task<bool> RemoveStudentFromCourse(int studentId, int courseId);
+
 
     }
     public class InstructorRepo : IInstructorRepo
@@ -202,7 +206,8 @@ namespace Examination_System.Repos
                         StudentId = se.StudentId,
                         StudentName =
                             db.Users.Where(u => u.UserId == se.StudentId).Select(u => u.UserName).FirstOrDefault(),
-                        Degree = se.Grade 
+                        Degree = se.Grade ,
+                        CrsId = se.CrsId
                     }).ToListAsync();
 
                 //check if the students degrees are available
@@ -305,6 +310,39 @@ namespace Examination_System.Repos
                 Console.WriteLine(ex.Message);
                 return null;
             }
+        }
+        public async Task<bool> EnrollStudent(int studentId, int courseId)
+        {
+            var exists = await db.StudentCourses
+                                 .AnyAsync(sc => sc.CrsId == courseId && sc.StudentId == studentId);
+            if (!exists)
+            {
+                var enrollment = new StudentCourse { CrsId = courseId, StudentId = studentId };
+                db.StudentCourses.Add(enrollment);
+                await db.SaveChangesAsync();
+                return true; // Enrollment successful
+            }
+            return false; // Student already enrolled
+        }
+        public async Task<bool> IsStudentEnrolled(int studentId, int courseId)
+        {
+            return await db.StudentCourses.AnyAsync(sc => sc.StudentId == studentId && sc.CrsId == courseId);
+        }
+
+        public async Task<bool> RemoveStudentFromCourse(int studentId, int courseId)
+        {
+            var studentCourse = await db.StudentCourses
+                .Where(sc => sc.StudentId == studentId && sc.CrsId == courseId)
+                .FirstOrDefaultAsync();
+
+            if (studentCourse != null)
+            {
+                db.StudentCourses.Remove(studentCourse);
+                await db.SaveChangesAsync();
+                return true; // Successfully removed
+            }
+
+            return false; // Not found
         }
 
 

@@ -13,7 +13,7 @@ using Examination_System.ModelViews;
 
 namespace Examination_System.Controllers
 {
-    [Authorize (Roles = "Instructor")]
+    [Authorize(Roles = "Instructor")]
     public class InstructorController : Controller
     {
         private readonly IInstructorRepo instructorRepo;
@@ -137,7 +137,7 @@ namespace Examination_System.Controllers
         {
             StudentCourse model = new StudentCourse();
 
-            var allStudents = await instructorRepo.GetStudents(); 
+            var allStudents = await instructorRepo.GetStudents();
             var allCourses = await instructorRepo.GetCourses();
             ViewBag.Students = new SelectList(allStudents, "UserId", "UserName");
             ViewBag.Courses = new SelectList(allCourses, "CrsId", "CrsName");
@@ -150,14 +150,10 @@ namespace Examination_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var exists = await db.StudentCourses
-                                     .AnyAsync(sc => sc.CrsId == model.CrsId && sc.StudentId == model.StudentId);
-                if (!exists)
+                var enrollmentSuccess = await instructorRepo.EnrollStudent(model.StudentId, model.CrsId);
+                if (enrollmentSuccess)
                 {
-                    var enrollment = new StudentCourse { CrsId = model.CrsId, StudentId = model.StudentId };
-                    db.StudentCourses.Add(enrollment);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("ShowResults"); 
+                    return RedirectToAction("ShowResults");
                 }
                 else
                 {
@@ -166,9 +162,10 @@ namespace Examination_System.Controllers
             }
 
             ViewBag.Students = new SelectList(await instructorRepo.GetStudents(), "UserId", "UserName");
-            ViewBag.Courses = new SelectList(await db.Courses.ToListAsync(), "CrsId", "CrsName");
+            ViewBag.Courses = new SelectList(await instructorRepo.GetCourses(), "CrsId", "CrsName");
             return View(model);
         }
+
         [HttpGet]
         //API to check if student is enrolled in a course
         public async Task<IActionResult> IsStudentEnrolled(int studentId, int courseId)
@@ -176,7 +173,19 @@ namespace Examination_System.Controllers
             bool isEnrolled = await db.StudentCourses.AnyAsync(sc => sc.StudentId == studentId && sc.CrsId == courseId);
             return Json(new { isEnrolled });
         }
+        [HttpPost]
 
+        public async Task<IActionResult> DeleteStudentFromCourse(int studentId, int courseId)
+        {
+            var removedSuccessfully = await instructorRepo.RemoveStudentFromCourse(studentId, courseId);
+            if (!removedSuccessfully)
+            {
+                return NotFound();
+            }
+
+            // Redirect to an appropriate action, for example, back to the course details or results page
+            return RedirectToAction(nameof(ShowResults)); // Adjust as necessary
+        }
 
     }
 }
