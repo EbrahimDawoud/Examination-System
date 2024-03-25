@@ -139,6 +139,7 @@ namespace Examination_System.Controllers
                 {
                     questionsId.Add(item.Question.QuestionId);
                 }
+                
                 ViewBag.questions = questions;
                 ViewBag.options = SRepo.ExamQuestionOptions(examQuestions);
                 ViewBag.answers = SRepo.ExamQuestionAnswers(examQuestions);
