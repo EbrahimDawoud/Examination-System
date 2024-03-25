@@ -132,6 +132,8 @@ namespace Examination_System.Controllers
             {
 
                 var generatedExamId = await instructorRepo.GenerateRandomExam(exam, MCQCount, TFCount, degreeOfMCQ, degreeOfTF);
+                ViewBag.success = "Exam Generated successfully";
+
                 return RedirectToAction("GenerateRandomExam");
             }
             catch (Exception e)
