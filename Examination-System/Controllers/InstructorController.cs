@@ -177,16 +177,15 @@ namespace Examination_System.Controllers
 
         public async Task<IActionResult> DeleteStudentFromCourse(int studentId, int courseId)
         {
-            var removedSuccessfully = await instructorRepo.RemoveStudentFromCourse(studentId, courseId);
-            if (!removedSuccessfully)
+            var removedAnsSuccessfully = await instructorRepo.RemoveStudentFromCourseAndAnswers(studentId, courseId);
+            if (!removedAnsSuccessfully)
             {
                 return NotFound();
             }
-
             // Redirect to an appropriate action, for example, back to the course details or results page
             return RedirectToAction(nameof(ShowResults)); // Adjust as necessary
         }
-
+       
     }
 }
 

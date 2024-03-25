@@ -44,7 +44,7 @@ namespace Examination_System.Repos
         public Task<List<ExamQuestion>> ExamQuestions();
         public  Task<bool> EnrollStudent(int studentId, int courseId);
         public Task<bool> IsStudentEnrolled(int studentId, int courseId);
-        public Task<bool> RemoveStudentFromCourse(int studentId, int courseId);
+        public Task<bool> RemoveStudentFromCourseAndAnswers(int studentId, int courseId);
 
 
     }
@@ -329,22 +329,32 @@ namespace Examination_System.Repos
             return await db.StudentCourses.AnyAsync(sc => sc.StudentId == studentId && sc.CrsId == courseId);
         }
 
-        public async Task<bool> RemoveStudentFromCourse(int studentId, int courseId)
+      
+
+        public async Task<bool> RemoveStudentFromCourseAndAnswers(int studentId, int courseId)
         {
             var studentCourse = await db.StudentCourses
-                .Where(sc => sc.StudentId == studentId && sc.CrsId == courseId)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(sc => sc.StudentId == studentId && sc.CrsId == courseId);
 
-            if (studentCourse != null)
-            {
-                db.StudentCourses.Remove(studentCourse);
-                await db.SaveChangesAsync();
-                return true; // Successfully removed
-            }
+            if (studentCourse == null) return false;
 
-            return false; // Not found
+            // Assuming you have a way to get ExamIds related to the courseId
+            var examIds = await db.Exams
+                .Where(e => e.CrsId == courseId)
+                .Select(e => e.ExamId)
+                .ToListAsync();
+
+            var studentAnswers = db.StudentAnswers
+                .Where(sa => examIds.Contains(sa.ExamId) && sa.StudentId == studentId);
+
+            db.StudentAnswers.RemoveRange(studentAnswers);
+
+            // Now remove the student from the course
+            db.StudentCourses.Remove(studentCourse);
+
+            await db.SaveChangesAsync();
+            return true; // Indicate success
         }
-
 
     }
 }
