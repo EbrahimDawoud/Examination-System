@@ -48,7 +48,14 @@
 											@answers[i]
 										</td>
 										<td>
-											@StudentAnswers[i]
+											@if (StudentAnswers[i] == answers[i])
+											{
+												<span class="text-success">@StudentAnswers[i]</span>
+											}else
+											{
+												<span class="text-danger">@StudentAnswers[i]</span>
+											}
+
 										</td>
 										<td>
 											@foreach (var option in options[i])
