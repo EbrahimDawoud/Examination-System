@@ -1,4 +1,4 @@
-﻿
+
 @{
     ViewData["Title"] = "GenerateReports";
     var Students = ViewBag.Students;
@@ -62,20 +62,24 @@
                 <option value="@student.StdId">@student.StdId</option>
             }
         </select>
-
         <a id="ExamQuestions" class="btn btn-danger" asp-controller="Reports" asp-action="get_exam_questions_with_student_answers" asp-route-ExamId="" asp-route-stdId="">Exam Questions with Student Answers</a>
+
     </div>
 
 
     <div class="m-2">
+
         <select id="ExamSelectChoice">
             <option value="">ExamId</option>
+
             @foreach (var ExamNum in Exams  )
             {
                 <option value="@ExamNum.ExamId">@ExamNum.ExamId</option>
             }
         </select>
+
         <a id="ExamChoice" class="btn btn-danger " asp-controller="Reports" asp-action="GetExamChoices" asp-route-ExamId=""> Exam Choices</a>
+
     </div>
 </div>
 
@@ -128,6 +132,7 @@
                 var ExmaId = $(this).val();
                 $("#ExamChoice").attr("href","/Reports/GetExamChoices?ExamId=" + ExmaId);
             })
+
 
         });
     </script>
