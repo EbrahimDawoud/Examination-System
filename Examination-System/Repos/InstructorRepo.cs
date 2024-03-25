@@ -37,7 +37,7 @@ namespace Examination_System.Repos
         public Task<List<Course>> GetCourses();
 
         // get all exams
-        public Task<List<StudentExam>> GetExams();
+        public Task<List<StudentAnswer>> GetExams();
 
         public Task<List<Exam>> Exams();
 
@@ -273,11 +273,11 @@ namespace Examination_System.Repos
                 return null;
             }
         }   
-        public async Task<List<StudentExam>> GetExams()
+        public async Task<List<StudentAnswer>> GetExams()
         {
-            try
+           try
             {
-                return await db.StudentExams.ToListAsync();
+                return await db.StudentAnswers.ToListAsync();
             }
             catch (Exception ex)
             {

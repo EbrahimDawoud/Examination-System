@@ -59,7 +59,7 @@
             <option value="">StudentId</option>
             @foreach (var student in studentExams)
             {
-                <option value="@student.StdId">@student.StdId</option>
+                <option value="@student.StudentId">@student.StudentId</option>
             }
         </select>
         <a id="ExamQuestions" class="btn btn-danger" asp-controller="Reports" asp-action="get_exam_questions_with_student_answers" asp-route-ExamId="" asp-route-stdId="">Exam Questions with Student Answers</a>

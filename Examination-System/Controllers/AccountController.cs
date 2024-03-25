@@ -46,7 +46,7 @@ namespace Examination_System.Controllers
                     }
                     else if(user.UserRole == "Instructor")
 					{
-                        return RedirectToAction("AddQuestion", "Instructor");
+                        return RedirectToAction("EnrollStudent", "Instructor");
                     }
                     else
 					{
