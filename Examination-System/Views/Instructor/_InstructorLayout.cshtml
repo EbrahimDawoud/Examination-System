@@ -9,9 +9,11 @@
           content="Mark Otto, Jacob Thornton, and Bootstrap contributors" />
     <meta name="generator" content="Hugo 0.118.2" />
     <title>Instructor - @ViewBag.Title</title>
+    <link href="./css/site.css" rel="stylesheet" />
 
     <link rel="canonical"
           href="https://getbootstrap.com/docs/5.3/examples/dashboard/" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     @*
 
@@ -40,6 +42,8 @@
     <!-- Custom styles for this template -->
     <link href="~/css/dashboard.css" rel="stylesheet" />
     <link href="~/css/main.css" rel="stylesheet" />
+    <link href="./css/site.css" rel="stylesheet" />
+
 </head>
 <body>
     <div class="modal fade"
@@ -255,20 +259,35 @@
                             Dashboard
                             </a>
                             </li>*@
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 @((ViewBag.Title == "Add Question") ? "active" : "")"
+                             @* add link for EnrollStudent *@
+                             <li>
 
+                             </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-danger d-flex align-items-center gap-2 @((ViewBag.Title == "Add Student To Course") ? "active" : "")"
+                                   asp-controller="Instructor"
+                                   asp-action="EnrollStudent"
+                                   data-link="Add Std To Course">
+                                    <svg class="bi"><use xlink:href="#file-earmark" /></svg>
+                                    Add Std To Course
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-danger d-flex align-items-center gap-2 @((ViewBag.Title == "Add Question") ? "active" : "")"
                                    asp-controller="Instructor"
                                    asp-action="AddQuestion"
+                                   role="button"
+                                   aria-pressed="@(ViewBag.Title == "Add Question" ? "true" : "false")"
                                    data-link="Add Question">
-                                    <svg class="bi"><use xlink:href="#file-earmark" /></svg>
+                                    <svg class="bi" width="16" height="16"><use xlink:href="#file-earmark" /></svg>
                                     Add Question
                                 </a>
                             </li>
 
 
+
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 @((ViewBag.Title == "Generate Random Exam") ? "active" : "")"
+                                <a class="btn btn-outline-danger d-flex align-items-center gap-2 @((ViewBag.Title == "Generate Random Exam") ? "active" : "")"
 
                                    asp-controller="Instructor"
                                    asp-action="GenerateRandomExam"
@@ -278,16 +297,16 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 @((ViewBag.Title == "Show Results") ? "active" : "")"
+                                <a class="btn btn-outline-danger d-flex align-items-center gap-2 @((ViewBag.Title == "Show Results") ? "active" : "")"
                                    asp-controller="Instructor"
                                    asp-action="ShowResults"
                                    data-link="Generate Exam">
                                     <svg class="bi"><use xlink:href="#people" /></svg>
-                                    Show Results
+                                    Show Students
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 @((ViewBag.Title == "GenerateReports") ? "active" : "")"
+                                <a class="btn btn-outline-danger d-flex align-items-center gap-2 @((ViewBag.Title == "GenerateReports") ? "active" : "")"
                                    asp-controller="Instructor"
                                    asp-action="GenerateReports"
                                    data-link="Generate Exam">
@@ -303,7 +322,7 @@
 
                         <ul class="nav flex-column mb-auto">
                             <li class="nav-item signout">
-                                <a class="nav-link d-flex align-items-center gap-2" asp-controller="Account" asp-action="Logout">
+                                <a class="btn btn-outline-danger d-flex align-items-center gap-2" asp-controller="Account" asp-action="Logout">
                                     <svg class="bi"><use xlink:href="#door-closed" /></svg>
                                     Log out
                                 </a>
@@ -327,6 +346,8 @@
             crossorigin="anonymous"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

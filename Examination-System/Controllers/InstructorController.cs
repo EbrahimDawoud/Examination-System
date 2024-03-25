@@ -9,10 +9,11 @@ using Examination_System.Data;
 using Examination_System.Models;
 using Examination_System.Repos;
 using Microsoft.AspNetCore.Authorization;
+using Examination_System.ModelViews;
 
 namespace Examination_System.Controllers
 {
-    [Authorize (Roles = "Instructor")]
+    [Authorize(Roles = "Instructor")]
     public class InstructorController : Controller
     {
         private readonly IInstructorRepo instructorRepo;
@@ -37,8 +38,10 @@ namespace Examination_System.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddQuestion(IFormCollection form, Dictionary<int, string> options = null)
+        public IActionResult AddQuestion(IFormCollection form, Dictionary<int, string> options = null)
         {
+
+
             // get the question data from the form
             var question = new Question
             {
@@ -48,24 +51,70 @@ namespace Examination_System.Controllers
                 QuestionAnswer = int.Parse(form["QuestionAnswer"])
             };
 
+            //check if the question text is empty
+            if (string.IsNullOrEmpty(question.QuestionText))
+            {
+                ViewBag.courses =
+                    new SelectList(instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result, "CrsId",
+                                               "CrsName"); //change with the signed in instructor id
+                ModelState.AddModelError("", "Please fill the question text");
+                return View(question);
+            }
+
+            //check if the question is MCQ and the options are filled
+
+            foreach (var option in options)
+            {
+                if ( question.QuestionType == "MCQ" && string.IsNullOrEmpty(option.Value))
+                {
+                    ViewBag.courses =
+                        new SelectList(instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result,
+                            "CrsId",
+                            "CrsName"); //change with the signed in instructor id
+                    ModelState.AddModelError("", "Please fill all options");
+                    return View(question);
+                }
+            }
+
             // add the question to the database
             var questionId = instructorRepo.AddQuestionToCourse(question).Result;
             if (questionId == -1)
             {
-                ModelState.AddModelError("", "Error in adding the question");
-                ViewBag.courses = new SelectList(instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result, "CrsId", "CrsName");//change with the signed in instructor id
+                ViewBag.courses =
+                    new SelectList(instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result, "CrsId",
+                        "CrsName");
+                ModelState.AddModelError("", "Error adding question to the course");
                 return View(question);
+
 
             }
 
             if (question.QuestionType == "MCQ")
             {
-                instructorRepo.AddQuestionOption(questionId, options);
+                if (!instructorRepo.AddQuestionOption(questionId, options).Result)
+                {
+                    ViewBag.courses =
+                        new SelectList(instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result,
+                            "CrsId",
+                            "CrsName");
+                    ModelState.AddModelError("", "Error adding question options");
+
+                    return View(question);
+                }
 
             }
-            return RedirectToAction("AddQuestion");
+
+            ViewBag.courses =
+                new SelectList(instructorRepo.GetInstructorCourses(userRepo.GetUserId(User)).Result, "CrsId",
+                                       "CrsName");
+            ViewBag.success = "Question added successfully";
+            return View(new Question());
+
 
         }
+
+
+
 
         [HttpGet]
         public IActionResult GenerateRandomExam()
@@ -83,6 +132,8 @@ namespace Examination_System.Controllers
             {
 
                 var generatedExamId = await instructorRepo.GenerateRandomExam(exam, MCQCount, TFCount, degreeOfMCQ, degreeOfTF);
+                ViewBag.success = "Exam Generated successfully";
+
                 return RedirectToAction("GenerateRandomExam");
             }
             catch (Exception e)
@@ -90,8 +141,6 @@ namespace Examination_System.Controllers
                 ModelState.AddModelError("", e.Message);
                 Console.WriteLine(e);
                 return View();
-
-
                 //throw;
             }
         }
@@ -131,6 +180,57 @@ namespace Examination_System.Controllers
             ViewBag.exams = Exams;
             ViewBag.examQuestions = ExamQuestions;
             return View();
+        }
+        public async Task<IActionResult> EnrollStudent()
+        {
+            StudentCourse model = new StudentCourse();
+
+            var allStudents = await instructorRepo.GetStudents();
+            var allCourses = await instructorRepo.GetCourses();
+            ViewBag.Students = new SelectList(allStudents, "UserId", "UserName");
+            ViewBag.Courses = new SelectList(allCourses, "CrsId", "CrsName");
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EnrollStudent(EnrollmentModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var enrollmentSuccess = await instructorRepo.EnrollStudent(model.StudentId, model.CrsId);
+                if (enrollmentSuccess)
+                {
+                    return RedirectToAction("ShowResults");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Student is already enrolled in this course.");
+                }
+            }
+
+            ViewBag.Students = new SelectList(await instructorRepo.GetStudents(), "UserId", "UserName");
+            ViewBag.Courses = new SelectList(await instructorRepo.GetCourses(), "CrsId", "CrsName");
+            return View(model);
+        }
+
+        [HttpGet]
+        //API to check if student is enrolled in a course
+        public async Task<IActionResult> IsStudentEnrolled(int studentId, int courseId)
+        {
+            bool isEnrolled = await instructorRepo.IsStudentEnrolled(studentId, courseId);
+            return Json(new { isEnrolled });
+        }
+        [HttpPost]
+
+        public async Task<IActionResult> DeleteStudentFromCourse(int studentId, int courseId)
+        {
+            var removedAnsSuccessfully = await instructorRepo.RemoveStudentFromCourseAndAnswers(studentId, courseId);
+            if (!removedAnsSuccessfully)
+            {
+                return NotFound();
+            }
+            return RedirectToAction(nameof(ShowResults)); // Adjust as necessary
         }
 
     }

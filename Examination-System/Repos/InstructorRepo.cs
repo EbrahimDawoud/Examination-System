@@ -37,11 +37,15 @@ namespace Examination_System.Repos
         public Task<List<Course>> GetCourses();
 
         // get all exams
-        public Task<List<StudentExam>> GetExams();
+        public Task<List<StudentAnswer>> GetExams();
 
         public Task<List<Exam>> Exams();
 
         public Task<List<ExamQuestion>> ExamQuestions();
+        public Task<bool> EnrollStudent(int studentId, int courseId);
+        public Task<bool> IsStudentEnrolled(int studentId, int courseId);
+        public Task<bool> RemoveStudentFromCourseAndAnswers(int studentId, int courseId);
+
 
     }
     public class InstructorRepo : IInstructorRepo
@@ -98,15 +102,22 @@ namespace Examination_System.Repos
                     db.QuestionOptions.Add(questionOption);
                 }
 
-                await db.SaveChangesAsync();
+                db.SaveChanges();
+
                 return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 //delete the question if the options are not added
-                db.Questions.Remove(db.Questions.Find(questionId));
-                return false;
+                var question = db.Questions.Find(questionId);
+                if (question != null)
+                {
+
+                    db.Questions.Remove(question);
+                }
+
+                throw;
             }
         }
 
@@ -194,7 +205,7 @@ namespace Examination_System.Repos
         {
             try
             {
-                
+
                 //get students degrees in this exam
                 var studentsDegrees = await db.StudentCourses.Where(se => se.CrsId == crsId).Include(se => se.Student)
                     .Select(se => new StudentDegree
@@ -202,13 +213,14 @@ namespace Examination_System.Repos
                         StudentId = se.StudentId,
                         StudentName =
                             db.Users.Where(u => u.UserId == se.StudentId).Select(u => u.UserName).FirstOrDefault(),
-                        Degree = se.Grade 
+                        Degree = se.Grade,
+                        CrsId = se.CrsId
                     }).ToListAsync();
 
                 //check if the students degrees are available
 
 
-                return  studentsDegrees;
+                return studentsDegrees;
 
 
             }
@@ -219,7 +231,7 @@ namespace Examination_System.Repos
             }
 
         }
-        public async Task<List<User>> GetStudents ()
+        public async Task<List<User>> GetStudents()
         {
             try
             {
@@ -229,8 +241,9 @@ namespace Examination_System.Repos
             {
                 Console.WriteLine(ex.Message);
                 return null;
-            }       
+            }
         }
+
         public async Task<List<User>> GetInstructors()
         {
             try
@@ -266,12 +279,18 @@ namespace Examination_System.Repos
                 Console.WriteLine(ex.Message);
                 return null;
             }
-        }   
-        public async Task<List<StudentExam>> GetExams()
+        }
+
+        public async Task<List<StudentAnswer>> GetExams()
         {
             try
             {
-                return await db.StudentExams.ToListAsync();
+                // Grouping by stdId and ExamId to get unique combinations
+                var grouped = db.StudentAnswers
+                                .GroupBy(sa => new { sa.StudentId, sa.ExamId })
+                                .Select(g => g.FirstOrDefault()); 
+
+                return await grouped.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -279,6 +298,7 @@ namespace Examination_System.Repos
                 return null;
             }
         }
+
         public async Task<List<Exam>> Exams()
         {
             try
@@ -299,13 +319,56 @@ namespace Examination_System.Repos
             {
                 return await db.ExamQuestions.ToListAsync();
             }
-                       catch (Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return null;
             }
         }
+        public async Task<bool> EnrollStudent(int studentId, int courseId)
+        {
+            var exists = await db.StudentCourses
+                                 .AnyAsync(sc => sc.CrsId == courseId && sc.StudentId == studentId);
+            if (!exists)
+            {
+                var enrollment = new StudentCourse { CrsId = courseId, StudentId = studentId };
+                db.StudentCourses.Add(enrollment);
+                await db.SaveChangesAsync();
+                return true; // Enrollment successful
+            }
+            return false; // Student already enrolled
+        }
+        public async Task<bool> IsStudentEnrolled(int studentId, int courseId)
+        {
+            return await db.StudentCourses.AnyAsync(sc => sc.StudentId == studentId && sc.CrsId == courseId);
+        }
 
+
+
+        public async Task<bool> RemoveStudentFromCourseAndAnswers(int studentId, int courseId)
+        {
+            var studentCourse = await db.StudentCourses
+                .FirstOrDefaultAsync(sc => sc.StudentId == studentId && sc.CrsId == courseId);
+
+            if (studentCourse == null) return false;
+
+            // Assuming you have a way to get ExamIds related to the courseId
+            var examIds = await db.Exams
+                .Where(e => e.CrsId == courseId)
+                .Select(e => e.ExamId)
+                .ToListAsync();
+
+            var studentAnswers = db.StudentAnswers
+                .Where(sa => examIds.Contains(sa.ExamId) && sa.StudentId == studentId);
+
+            db.StudentAnswers.RemoveRange(studentAnswers);
+
+            // Now remove the student from the course
+            db.StudentCourses.Remove(studentCourse);
+
+            await db.SaveChangesAsync();
+            return true; // Indicate success
+        }
 
     }
 }

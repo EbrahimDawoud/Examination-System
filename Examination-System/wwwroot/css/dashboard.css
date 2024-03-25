@@ -46,3 +46,28 @@
 .navbar .form-control {
   padding: .75rem 1rem;
 }
+
+.card-header {
+    background-color: #d9534f;
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
+    .btn-primary:hover {
+        background-color: #c9302c;
+        border-color: #ac2925;
+    }
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+}
+
+.form-control, .form-select {
+    border-radius: 0;
+}
+

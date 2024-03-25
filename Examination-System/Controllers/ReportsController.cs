@@ -40,6 +40,7 @@ namespace Examination_System.Controllers
             graphics.DrawString("ITIReports", font, PdfBrushes.DarkRed, new PointF(13,80));
             graphics.DrawString("Project SQL", font, PdfBrushes.DarkRed, new PointF(13, 105));
 
+
             //Create a PdfGrid.
             PdfGrid pdfGrid = new PdfGrid();
             //Saving the PDF to the MemoryStream.
@@ -134,6 +135,7 @@ namespace Examination_System.Controllers
             //Draw the text.
             graphics.DrawString("ITIReports", font, PdfBrushes.DarkRed, new PointF(13, 80));
             graphics.DrawString("Project SQL", font, PdfBrushes.DarkRed, new PointF(13, 105));
+
 
             //Create a PdfGrid.
             PdfGrid pdfGrid = new PdfGrid();
@@ -243,7 +245,6 @@ namespace Examination_System.Controllers
             graphics.DrawString("Student Answers", font, PdfBrushes.DarkRed, new PointF(100, 105));
             graphics.DrawString($"Exam Number {ExamId} for Student {stdId}", font, PdfBrushes.DarkRed, new PointF(100, 15));
 
-
             //Create a PdfGrid.
             PdfGrid pdfGrid = new PdfGrid();
             //Saving the PDF to the MemoryStream.
@@ -292,6 +293,7 @@ namespace Examination_System.Controllers
             PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20, PdfFontStyle.Bold);
             //set the text coor
             //Draw the text.
+
             graphics.DrawString("ITIReports", font, PdfBrushes.DarkRed, new PointF(13, 80));
             graphics.DrawString("Exam Choices", font, PdfBrushes.DarkRed, new PointF(13, 105));
 
