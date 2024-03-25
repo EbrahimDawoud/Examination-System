@@ -37,7 +37,7 @@ namespace Examination_System.Repos
         public Task<List<Course>> GetCourses();
 
         // get all exams
-        public Task<List<StudentExam>> GetExams();
+        public Task<List<StudentAnswer>> GetExams();
 
         public Task<List<Exam>> Exams();
 
@@ -280,11 +280,17 @@ namespace Examination_System.Repos
                 return null;
             }
         }
-        public async Task<List<StudentExam>> GetExams()
+
+        public async Task<List<StudentAnswer>> GetExams()
         {
             try
             {
-                return await db.StudentExams.ToListAsync();
+                // Grouping by stdId and ExamId to get unique combinations
+                var grouped = db.StudentAnswers
+                                .GroupBy(sa => new { sa.StudentId, sa.ExamId })
+                                .Select(g => g.FirstOrDefault()); 
+
+                return await grouped.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -292,6 +298,7 @@ namespace Examination_System.Repos
                 return null;
             }
         }
+
         public async Task<List<Exam>> Exams()
         {
             try
