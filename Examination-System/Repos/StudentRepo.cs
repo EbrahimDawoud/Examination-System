@@ -17,7 +17,7 @@ namespace Examination_System.Repos
         public Task<List<StudentCourse>> GetStudentCourses(int id);
         public Task<List<StudentCourse>> GetStudentResultsByStdId(int stdId);
         public Task<Exam> GetResultExam(int stdId, int crsId);
-        public Task<List<string>> StudentAnswer(int examId, int studentId);
+        public Task<List<string>> StudentAnswer(int examId, int studentId, List<int> qusetionId);
         public List<List<string>> ExamQuestionOptions(List<ExamQuestion> examQuestion);
         public List<string> ExamQuestionAnswers(List<ExamQuestion> examQuestion);
         public Task MarkExam(int examId, int studentId);
@@ -210,25 +210,36 @@ namespace Examination_System.Repos
                 return null;
             }
         }
-        public async Task<List<string>> StudentAnswer(int examId, int studentId)
+        public async Task<List<string>> StudentAnswer(int examId, int studentId, List<int> questionId)
         {
             try
             {
-                var answers = db.StudentAnswers.Where(sa => sa.ExamId == examId && sa.StudentId == studentId).ToListAsync();
-                Dictionary<int, int> answerOp = new Dictionary<int, int>();
-                foreach (var item in await answers)
+                var answers = await db.StudentAnswers
+                    .Where(sa => sa.ExamId == examId && sa.StudentId == studentId)
+                    .ToListAsync();
+
+                Dictionary<int, int> answerOp = answers.ToDictionary(sa => sa.QuestionId, sa => sa.SelectedOption);
+
+                List<string> studentAnswers = new List<string>();
+                foreach (int id in questionId)
                 {
-                    answerOp.Add(item.QuestionId, item.SelectedOption);
+                    if (answerOp.ContainsKey(id))
+                    {
+                        int selectedOption = answerOp[id];
+                        string answerText = await db.QuestionOptions
+                            .Where(qo => qo.QuestionId == id && qo.OptionNo == selectedOption)
+                            .Select(qo => qo.OptionText)
+                            .FirstOrDefaultAsync();
+
+                        studentAnswers.Add(answerText);
+                    }
+                    else
+                    {
+                        studentAnswers.Add("UnAnswered");
+                    }
                 }
 
-                List<string> StdAnswers = new List<string>();
-                foreach (var item in answerOp)
-                {
-                    StdAnswers.Add(db.QuestionOptions.Where(qo => qo.QuestionId == item.Key && qo.OptionNo == item.Value).Select(qo => qo.OptionText).FirstOrDefault());
-                }
-                return StdAnswers;
-
-
+                return studentAnswers;
             }
             catch (Exception ex)
             {

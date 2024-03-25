@@ -134,12 +134,16 @@ namespace Examination_System.Controllers
                 {
                     questions.Add(item.Question.QuestionText);
                 }
+                List<int> questionsId = new List<int>();
+                foreach (var item in examQuestions)
+                {
+                    questionsId.Add(item.Question.QuestionId);
+                }
                 ViewBag.questions = questions;
                 ViewBag.options = SRepo.ExamQuestionOptions(examQuestions);
                 ViewBag.answers = SRepo.ExamQuestionAnswers(examQuestions);
-                ViewBag.StudentAnswers = SRepo.StudentAnswer(exam.ExamId, id).Result;
+                ViewBag.StudentAnswers = SRepo.StudentAnswer(exam.ExamId, id, questionsId).Result;
                 return View(exam);
-
             }
             catch (Exception e)
             {
