@@ -27,10 +27,20 @@ namespace Examination_System.Controllers
             PdfPage page = document.Pages.Add();
             //Create PDF graphics for the page.
             PdfGraphics graphics = page.Graphics;
+            //add image to the pdf
+            FileStream imageStream = new FileStream("wwwroot/assets/iti-logo-text.png", FileMode.Open, FileAccess.Read);
+            PdfBitmap image = new PdfBitmap(imageStream);
+            SizeF imageSize = new SizeF(40, 40);
+            PointF imageLocation = new PointF(14, 13);
+            page.Graphics.DrawImage(image, imageLocation, imageSize);
             //Set the standard font.
-            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20,PdfFontStyle.Bold);
+            //set the text coor
             //Draw the text.
-            graphics.DrawString("ITIReports", font, PdfBrushes.Black, new PointF(200, 300));
+            graphics.DrawString("ITIReports", font, PdfBrushes.DarkRed, new PointF(13,80));
+            graphics.DrawString("Project SQL", font, PdfBrushes.DarkRed, new PointF(13, 105));
+
+
             //Create a PdfGrid.
             PdfGrid pdfGrid = new PdfGrid();
             //Saving the PDF to the MemoryStream.
@@ -40,7 +50,7 @@ namespace Examination_System.Controllers
             //Apply built-in table style
             pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent1);
             //Draw grid to the page of PDF document.
-            pdfGrid.Draw(page, new PointF(10, 10));
+            pdfGrid.Draw(page, new PointF(0, 300));
             //Write the PDF document to stream.
             MemoryStream stream = new MemoryStream();
             document.Save(stream);
@@ -113,10 +123,20 @@ namespace Examination_System.Controllers
             PdfPage page = document.Pages.Add();
             //Create PDF graphics for the page.
             PdfGraphics graphics = page.Graphics;
+            //add image to the pdf
+            FileStream imageStream = new FileStream("wwwroot/assets/iti-logo-text.png", FileMode.Open, FileAccess.Read);
+            PdfBitmap image = new PdfBitmap(imageStream);
+            SizeF imageSize = new SizeF(40, 40);
+            PointF imageLocation = new PointF(14, 13);
+            page.Graphics.DrawImage(image, imageLocation, imageSize);
             //Set the standard font.
-            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20, PdfFontStyle.Bold);
+            //set the text coor
             //Draw the text.
-            graphics.DrawString("ITIReports", font, PdfBrushes.Black, new PointF(200, 300));
+            graphics.DrawString("ITIReports", font, PdfBrushes.DarkRed, new PointF(13, 80));
+            graphics.DrawString("Project SQL", font, PdfBrushes.DarkRed, new PointF(13, 105));
+
+
             //Create a PdfGrid.
             PdfGrid pdfGrid = new PdfGrid();
             //Saving the PDF to the MemoryStream.
@@ -126,7 +146,7 @@ namespace Examination_System.Controllers
             //Apply built-in table style
             pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent1);
             //Draw grid to the page of PDF document.
-            pdfGrid.Draw(page, new PointF(10, 10));
+            pdfGrid.Draw(page, new PointF(0, 300));
             //Write the PDF document to stream.
             MemoryStream stream = new MemoryStream();
             document.Save(stream);
@@ -156,10 +176,21 @@ namespace Examination_System.Controllers
             PdfPage page = document.Pages.Add();
             //Create PDF graphics for the page.
             PdfGraphics graphics = page.Graphics;
+            //add image to the pdf
+            FileStream imageStream = new FileStream("wwwroot/assets/iti-logo-text.png", FileMode.Open, FileAccess.Read);
+            PdfBitmap image = new PdfBitmap(imageStream);
+            SizeF imageSize = new SizeF(40, 40);
+            PointF imageLocation = new PointF(14, 13);
+            page.Graphics.DrawImage(image, imageLocation, imageSize);
             //Set the standard font.
-            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20, PdfFontStyle.Bold);
+            //set the text coor
             //Draw the text.
-            graphics.DrawString("ITIReports", font, PdfBrushes.Black, new PointF(200, 100));
+            graphics.DrawString("ITIReports", font, PdfBrushes.DarkRed, new PointF(13, 80));
+            graphics.DrawString("Topic Reports", font, PdfBrushes.DarkRed, new PointF(13, 105));
+            graphics.DrawString($"Topics for Course Number {crsId}", font, PdfBrushes.DarkRed, new PointF(100, 15));
+
+
             //Create a PdfGrid.
             PdfGrid pdfGrid = new PdfGrid();
             //Saving the PDF to the MemoryStream.
@@ -169,7 +200,7 @@ namespace Examination_System.Controllers
             //Apply built-in table style
             pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent1);
             //Draw grid to the page of PDF document.
-            pdfGrid.Draw(page, new PointF(10, 10));
+            pdfGrid.Draw(page, new PointF(0, 300));
             //Write the PDF document to stream.
             MemoryStream stream = new MemoryStream();
             document.Save(stream);
@@ -200,10 +231,20 @@ namespace Examination_System.Controllers
             PdfPage page = document.Pages.Add();
             //Create PDF graphics for the page.
             PdfGraphics graphics = page.Graphics;
+            //add image to the pdf
+            FileStream imageStream = new FileStream("wwwroot/assets/iti-logo-text.png", FileMode.Open, FileAccess.Read);
+            PdfBitmap image = new PdfBitmap(imageStream);
+            SizeF imageSize = new SizeF(40, 40);
+            PointF imageLocation = new PointF(14, 13);
+            page.Graphics.DrawImage(image, imageLocation, imageSize);
             //Set the standard font.
-            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20, PdfFontStyle.Bold);
+            //set the text coor
             //Draw the text.
-            graphics.DrawString("ITI Reports", font, PdfBrushes.Black, new PointF(200, 100));
+            graphics.DrawString("ITIReports", font, PdfBrushes.DarkRed, new PointF(13, 80));
+            graphics.DrawString("Student Answers", font, PdfBrushes.DarkRed, new PointF(100, 105));
+            graphics.DrawString($"Exam Number {ExamId} for Student {stdId}", font, PdfBrushes.DarkRed, new PointF(100, 15));
+
             //Create a PdfGrid.
             PdfGrid pdfGrid = new PdfGrid();
             //Saving the PDF to the MemoryStream.
@@ -213,7 +254,7 @@ namespace Examination_System.Controllers
             //Apply built-in table style
             pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent1);
             //Draw grid to the page of PDF document.
-            pdfGrid.Draw(page, new PointF(10, 10));
+            pdfGrid.Draw(page, new PointF(0, 300));
             //Write the PDF document to stream.
             MemoryStream stream = new MemoryStream();
             document.Save(stream);
@@ -242,10 +283,20 @@ namespace Examination_System.Controllers
             PdfPage page = document.Pages.Add();
             //Create PDF graphics for the page.
             PdfGraphics graphics = page.Graphics;
+            //add image to the pdf
+            FileStream imageStream = new FileStream("wwwroot/assets/iti-logo-text.png", FileMode.Open, FileAccess.Read);
+            PdfBitmap image = new PdfBitmap(imageStream);
+            SizeF imageSize = new SizeF(40, 40);
+            PointF imageLocation = new PointF(14, 13);
+            page.Graphics.DrawImage(image, imageLocation, imageSize);
             //Set the standard font.
-            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20, PdfFontStyle.Bold);
+            //set the text coor
             //Draw the text.
-            graphics.DrawString("ITI Reports", font, PdfBrushes.Black, new PointF(200, 300));
+
+            graphics.DrawString("ITIReports", font, PdfBrushes.DarkRed, new PointF(13, 80));
+            graphics.DrawString("Exam Choices", font, PdfBrushes.DarkRed, new PointF(13, 105));
+
             //Create a PdfGrid.
             PdfGrid pdfGrid = new PdfGrid();
             //Saving the PDF to the MemoryStream.
@@ -255,7 +306,7 @@ namespace Examination_System.Controllers
             //Apply built-in table style
             pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent1);
             //Draw grid to the page of PDF document.
-            pdfGrid.Draw(page, new PointF(10, 10));
+            pdfGrid.Draw(page, new PointF(0, 300));
             //Write the PDF document to stream.
             MemoryStream stream = new MemoryStream();
             document.Save(stream);
