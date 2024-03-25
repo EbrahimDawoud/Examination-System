@@ -18,13 +18,11 @@ namespace Examination_System.Controllers
     {
         private readonly IInstructorRepo instructorRepo;
         private readonly IUserRepo userRepo;
-        private readonly ExaminationSystemContext db;
 
-        public InstructorController(IInstructorRepo _instructorRepo, IUserRepo _userRepo, ExaminationSystemContext context)
+        public InstructorController(IInstructorRepo _instructorRepo, IUserRepo _userRepo)
         {
             instructorRepo = _instructorRepo;
             userRepo = _userRepo;
-            db = context;
         }
 
         [HttpGet]
@@ -170,7 +168,7 @@ namespace Examination_System.Controllers
         //API to check if student is enrolled in a course
         public async Task<IActionResult> IsStudentEnrolled(int studentId, int courseId)
         {
-            bool isEnrolled = await db.StudentCourses.AnyAsync(sc => sc.StudentId == studentId && sc.CrsId == courseId);
+            bool isEnrolled = await instructorRepo.IsStudentEnrolled(studentId, courseId);
             return Json(new { isEnrolled });
         }
         [HttpPost]
@@ -182,7 +180,6 @@ namespace Examination_System.Controllers
             {
                 return NotFound();
             }
-            // Redirect to an appropriate action, for example, back to the course details or results page
             return RedirectToAction(nameof(ShowResults)); // Adjust as necessary
         }
        
