@@ -272,12 +272,17 @@ namespace Examination_System.Repos
                 Console.WriteLine(ex.Message);
                 return null;
             }
-        }   
+        }
         public async Task<List<StudentAnswer>> GetExams()
         {
-           try
+            try
             {
-                return await db.StudentAnswers.ToListAsync();
+                // Grouping by stdId and ExamId to get unique combinations
+                var grouped = db.StudentAnswers
+                                .GroupBy(sa => new { sa.StudentId, sa.ExamId })
+                                .Select(g => g.FirstOrDefault()); 
+
+                return await grouped.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -285,6 +290,7 @@ namespace Examination_System.Repos
                 return null;
             }
         }
+
         public async Task<List<Exam>> Exams()
         {
             try
